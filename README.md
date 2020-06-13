@@ -1,102 +1,92 @@
-# agile-estimating-and-planning
+# agile-estimating-and-planning [![Build Status](https://travis-ci.org/sasachichito/agile-estimating-and-planning.svg?branch=master)](https://travis-ci.org/sasachichito/agile-estimating-and-planning)
 [<img src="https://images-fe.ssl-images-amazon.com/images/I/51A6GGDWeaL.jpg" width=250>](https://www.amazon.co.jp/dp/B00IR1HYGW/ref=dp-kindle-redirect?_encoding=UTF8&btkr=1)
 
+## アーキテクチャ
+<img src="https://raw.githubusercontent.com/wiki/sasachichito/agile-estimating-and-planning/images/architecture.png" width=250>
+
 ## ビルド&サービス起動
+```
+./gradlew :iteration:bootrun :release:bootrun --parallel
+```
+
+# client
+https://sasachichito.github.io/agile-estimating-and-planning/client/  
+
+## Usage
+| Step | 項目 | 備考 |
+| :--- | :--- | :--- |
+| 1. | リリースプランニング | 1プロジェクトに対して1回実施 |
+| 1.1 | 　　ストーリー見積もり・登録 ||
+| 1.2 | 　　スコープ登録 ||
+| 1.3 | 　　リソース登録 ||
+| 1.4 | 　　プラン登録 ||
+| 2. | イテレーションプランニング | 1プロジェクトに対してn回実施 |
+| 2.1 | 　　タスク見積もり・登録 ||
+| 2.2 | 　　スコープ登録 ||
+| 2.3 | 　　リソース登録 ||
+| 2.4 | 　　プラン登録 ||
+| 3. | バーン登録 ||
+| 任意 | ダッシュボード確認 ||
+| 任意 | エクスポート | 登録データはサーバープロセスがkillされると失われるため <br/> エクスポートしてファイルを保存しておくこと|
+| 任意 | インポート | エクスポートしたファイルをインポート <br/> ※データは上書きされる |
 
 
-# release
-## ドメインモデル
-<img src="https://raw.githubusercontent.com/wiki/sasachichito/agile-release-planning/images/domain-model.png" width=450>
+# release service
+リリース見積もり・計画サービス  
 
-## ユビキタス言語ディクショナリ
-| スコープ ||
+<img src="https://raw.githubusercontent.com/wiki/sasachichito/agile-estimating-and-planning/images/release-domain-model.png" width=450>
+
+| Plan(プラン) ||
 | :--- | :--- |
-| スコープ | 顧客要求の実現対象範囲 |
+| プラン | 成果物のリリース計画 |
+
+| Period(期間) ||
+| :--- | :--- |
+| 期間 | プランの実行期間(スコープとリソースから導出される) |
+
+| Scope(スコープ) ||
+| :--- | :--- |
+| スコープ | 顧客要求のうち実現対象とする範囲 |
 | ストーリー | スコープに含まれる顧客要求の1つ |
 | ストーリーポイント | ストーリーの規模を表す数値(ストーリー間で相対値となる) <br> ※利用可能な数値はフィボナッチ数列(1,2,3,5,8...)と場合によっては0 |
 | 50%見積もり | 平均ケースのストーリーポイント |
 | 90%見積もり | 最悪ケースのストーリーポイント |
 
-| リソース ||
+| Resource(リソース) ||
 | :--- | :--- |
 | リソース | 開発チームのベロシティと費用 |
 | ベロシティ | 開発チームの単位期間(1日)あたりの消費ストーリーポイント |
 | コスト | 開発チームの単位期間(1日)あたりの費用 |
 
-| プラン ||
+# iteration service
+イテレーション毎の見積もり・計画サービス  
+
+<img src="https://raw.githubusercontent.com/wiki/sasachichito/agile-estimating-and-planning/images/iteration-domain-model.png" width=450>
+
+| Plan(プラン) ||
 | :--- | :--- |
-| プラン | スコープを完了する計画 |
-| 期間 | スコープとリソースから導出されるプランの実行期間 |
+| プラン | 1イテレーションを完了する計画 |
 
-| バーン ||
+| Period(period) ||
 | :--- | :--- |
-| バーン | 何らかの作業を完了すること |
-| バーンダウンチャート | プランの進捗状況を示すチャート |
+| 期間 | プランの実行期間(スコープとリソースから導出される) |
 
-
-## 使用法
-| ステップ | リソース名 | メソッド | 説明 |
-| :--- | :--- | :--- | :--- |
-| 1 | ストーリー | POST | 新規ストーリーを登録 |
-| 2 | スコープ | POST | 新規スコープを登録 |
-| 3 | リソース | POST | 新規リソースを登録 |
-| 4 | プラン | POST | 新規プランを登録 |
-| 5 | マイルストーンリスト | [マイルストーンリスト](http://localhost:8080/milestone.html) | プランのマイルストーンリストを確認 |
-| 任意 | バーン | POST | 完了したストーリーの登録 |
-| 任意 | バーンダウンチャート | [バーンダウンチャート](http://localhost:8080/chart.html) | プランの進捗確認 |
-| 任意 | 管理ツール/エクスポート | GET | データのエクスポート <br/> ※登録データはサーバープロセスがkillされると失われるため <br/> データエクスポートした結果を別途保存しておくこと |
-| 任意 | 管理ツール/インポート | GET | エクスポートデータをインポート |
-| 任意 | 任意 | GET | 登録済みリソースを確認 |
-| 任意 | 任意 | PUT | 登録済みリソースの変更 |
-| 任意 | 任意 | DELETE | 登録済みリソースの削除 |
-
-IFの詳細は[Swagger UI](http://localhost:8080/swagger-ui.html)の`Parameters`と`Responses`を参照のこと。
-
-# iteration
-## ドメインモデル
-<img src="https://raw.githubusercontent.com/wiki/sasachichito/agile-iteration-planning/images/domain-model.png" width=450>
-
-## ユビキタス言語ディクショナリ
-| スコープ ||
+| Scope(スコープ) ||
 | :--- | :--- |
-| スコープ | 顧客要求の実現対象範囲 |
-| ストーリー | スコープに含まれる顧客要求の1つ |
+| スコープ | イテレーションに含めるストーリー |
 | タスク | ストーリーの実現に必要な作業 |
 | 理想時間 | 何かにかかる時間のうち周辺的な作業にかかる時間を差し引いたもの <br> ※アメフトの試合時間は理想時間では60mだが現実には3h程度かかる |
 | 50%見積もり | 50%の確率で作業を完了させるときにかかる理想時間 |
 | 90%見積もり | 90%の確率で作業を完了させるときにかかる理想時間 |
 
-| リソース ||
+| Resource(リソース) ||
 | :--- | :--- |
 | リソース | 開発チームの稼働時間と費用 |
 | メンバー | 開発者 |
 | 1日あたりの稼働時間 | 単位期間(1日)あたりの稼働の理想時間 <br/> ※8h勤務の開発者はおおよそ6〜7h |
 
-| プラン ||
+# 共通用語
+|  ||
 | :--- | :--- |
-| プラン | スコープを完了する計画 |
-| 期間 | スコープとリソースから導出されるプランの実行期間 |
-
-| バーン ||
-| :--- | :--- |
-| バーン | 何らかの作業を完了すること |
+| Burn(バーン) | 何らかの作業を完了すること |
 | バーンダウンチャート | プランの進捗状況を示すチャート |
-
-
-## 使用法
-| ステップ | リソース名 | メソッド | 説明 |
-| :--- | :--- | :--- | :--- |
-| 1 | ストーリー | POST | 新規ストーリーを登録 |
-| 2 | スコープ | POST | 新規スコープを登録 |
-| 3 | リソース | POST | 新規リソースを登録 |
-| 4 | プラン | POST | 新規プランを登録 |
-| 5 | マイルストーンリスト | [管理ツール](http://localhost:8081/index.html#)> MILESTONE | プランのマイルストーンリストを確認 |
-| 任意 | バーン | POST | 完了したタスクの登録 |
-| 任意 | バーンダウンチャート | [管理ツール](http://localhost:8081/index.html#)> CHART | プランの進捗確認 |
-| 任意 | 管理ツール/エクスポート | GET | データのエクスポート <br/> ※登録データはサーバープロセスがkillされると失われるため <br/> データエクスポートした結果を別途保存しておくこと |
-| 任意 | 管理ツール/インポート | GET | エクスポートデータをインポート |
-| 任意 | 任意 | GET | 登録済みリソースを確認 |
-| 任意 | 任意 | PUT | 登録済みリソースの変更 |
-| 任意 | 任意 | DELETE | 登録済みリソースの削除 |
-
-IFの詳細は[Swagger UI](http://localhost:8081/swagger-ui.html)の`Parameters`と`Responses`を参照のこと。

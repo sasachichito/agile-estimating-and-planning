@@ -16,7 +16,7 @@ allprojects {
 	apply plugin: 'io.spring.dependency-management'
 }
 
-// root projects
+// root project
 bootJar { enabled = false }
 
 subprojects {
