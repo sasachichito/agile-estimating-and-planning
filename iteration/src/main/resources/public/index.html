@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Agile Planning</title>
+    <link rel="shortcut icon" type="image/x-icon" href="image/favicon.ico">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/list_input.css">
+    <link rel="stylesheet" href="css/search_result.css">
+</head>
+<body>
+    <!-- SideMenu & Main & RightSide -->
+    <div class="wrapper">
+
+        <!-- SideMenu -->
+        <div id="sidemenu" class="sidemenu">
+            <div class="release-nav">
+                <a id="release-toggle" class="toggle" href="javascript:releaseActive()">
+                    Release Planning
+                </a>
+            </div>
+
+            <div class="iteration-nav">
+                <a id="iteration-toggle" class="toggle" href="javascript:iterationActive()">
+                    Iteration Planning
+                </a>
+            </div>
+
+            <nav class="global-nav">
+                <ul id="side-menu-list">
+                    <!--<li id="side-story" class="nav-item">-->
+                        <!--<a href="javascript:contentToStory()">-->
+                            <!--<div class="left-box">STORY</div>-->
+                            <!--<div class="right-box"><div class="arrow-right"></div></div>-->
+                        <!--</a></li>-->
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main -->
+        <main class="main clearfix">
+
+            <!-- Header -->
+            <header class="header">
+
+            </header>
+
+            <!-- Content -->
+            <div id="content" class="content">
+
+
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+
+            </footer>
+        </main>
+
+        <!-- Right Side -->
+        <div class="right-side clearfix">
+            <div class="icons">
+                <a id="export" download="plan.json" href="javascript:adminInstance().fileExport()">
+                    <i class="fas fa-download fa-3x"></i>
+                </a>
+                <a id="import">
+                    <label for="getFile">
+                        <i class="fas fa-upload fa-3x"></i>
+                        <input type="file" id="getFile" onchange="adminInstance().fileImport()" style="display: none;">
+                    </label>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+    <script src="https://kit.fontawesome.com/44c43d1a94.js" crossorigin="anonymous"></script>
+
+    <script type="module">
+        import IterationStory from "./js/iteration/story.js";
+        import IterationScope from "./js/iteration/scope.js";
+        import IterationResource from "./js/iteration/resource.js";
+        import IterationPlan from "./js/iteration/plan.js";
+        import IterationBurn from "./js/iteration/burn.js";
+        import IterationDashboard from "./js/iteration/dashboard.js";
+
+        import ReleaseStory from "./js/release/story.js";
+        import ReleaseScope from "./js/release/scope.js";
+        import ReleaseResource from "./js/release/resource.js";
+        import ReleasePlan from "./js/release/plan.js";
+        import ReleaseBurn from "./js/release/burn.js";
+        import ReleaseDashboard from "./js/release/dashboard.js";
+
+        import * as webApi from "./js/common/webApi.js";
+        import * as section from "./js/common/section.js";
+        import * as parts from "./js/common/parts.js";
+
+        import Util from "./js/common/util.js";
+        import Admin from "./js/admin/admin.js";
+
+        window.iteration = {};
+        window.iteration.story = new IterationStory(webApi, section, parts);
+        window.iteration.scope = new IterationScope(webApi, section, parts);
+        window.iteration.resource = new IterationResource(webApi, section, parts);
+        window.iteration.plan = new IterationPlan(webApi, section, parts);
+        window.iteration.burn = new IterationBurn(webApi, section, parts);
+        window.iteration.dashboard = new IterationDashboard(webApi, section, parts);
+
+        window.release = {};
+        window.release.story = new ReleaseStory(webApi, section, parts);
+        window.release.scope = new ReleaseScope(webApi, section, parts);
+        window.release.resource = new ReleaseResource(webApi, section, parts);
+        window.release.plan = new ReleasePlan(webApi, section, parts);
+        window.release.burn = new ReleaseBurn(webApi, section, parts);
+        window.release.dashboard = new ReleaseDashboard(webApi, section, parts);
+
+        window.util = new Util();
+        window.admin = new Admin(webApi);
+
+        releaseActive();
+    </script>
+    <script>
+        // Iteration
+        function iStoryInstance() {
+            return window.iteration.story;
+        }
+
+        function iScopeInstance() {
+            return window.iteration.scope;
+        }
+
+        function iResourceInstance() {
+            return window.iteration.resource;
+        }
+
+        function iPlanInstance() {
+            return window.iteration.plan;
+        }
+
+        function iBurnInstance() {
+            return window.iteration.burn;
+        }
+
+        function iDashboardInstance() {
+            return window.iteration.dashboard;
+        }
+
+        // Release
+        function rStoryInstance() {
+            return window.release.story;
+        }
+
+        function rScopeInstance() {
+            return window.release.scope;
+        }
+
+        function rResourceInstance() {
+            return window.release.resource;
+        }
+
+        function rPlanInstance() {
+            return window.release.plan;
+        }
+
+        function rBurnInstance() {
+            return window.release.burn;
+        }
+
+        function rDashboardInstance() {
+            return window.release.dashboard;
+        }
+
+        // Util
+        function utilInstance() {
+            return window.util;
+        }
+
+        // Admin
+        function adminInstance() {
+            return window.admin;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+.search-section {
+  height: 15%;
+  width: 100%;
+  overflow: scroll;
+}
+
+.result-section {
+  height: 85%;
+  width: 100%;
+  overflow: scroll;
+}
+
+.search-section .block1, .result-section .block1 {
+  height: calc(100% - 2rem);
+  width: 90%;
+  margin: 1rem auto;
+  background-color: #FFF;
+  box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.26);
+  border-radius: 0.5rem;
+  overflow: scroll;
+}
+
+.search-section input {
+  line-height: 3rem;
+  width: 8rem;
+  font-size: 1.2rem;
+  padding-left: 1rem;
+  border-style: solid;
+  border-width: 0 0 0.2rem 0;
+  border-bottom-color: #E0E0E0;
+}
+
+.search-section .block1 div {
+  float: left;
+  margin: 1rem;
+}
+
+.milestone i, .chart i {
+  color: #64B5F6;
+}
+
+/* Milestone List*/
+.result-section .main-entry {
+  width: 90%;
+  margin: 2rem auto;
+}
+
+.result-section .sub-entry-level-1 {
+  width: 80%;
+  margin: 1rem 1rem 0 auto;
+}
+
+.result-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.result-section th,
+.result-section td {
+  line-height: 2.5rem;
+  border-width: 0.1rem 0;
+  text-align: left;
+  vertical-align: bottom;
+  border-style: solid;
+  border-bottom-color: #9E9E9E;
+}
+
+.result-section th {
+  border-top-color: #FFF;
+  color: #9E9E9E;
+  font-weight: normal;
+}
+
+.result-section td {
+  color: black;
+}

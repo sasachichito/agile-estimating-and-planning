@@ -1,0 +1,168 @@
+.list-section {
+  height: 40%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.input-section {
+  height: 60%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.list-section .block1, .input-section .block1 {
+  height: calc(100% - 2rem);
+  width: 90%;
+  margin: 1rem auto;
+  background-color: #FFF;
+  box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.26);
+  border-radius: 0.5rem;
+  overflow: scroll;
+}
+
+.list-section .main-entry {
+  width: 90%;
+  margin: 2rem auto;
+}
+
+.list-section .sub-entry-level-1 {
+  width: 80%;
+  margin: 1rem 1rem 0 auto;
+}
+
+.list-section .sub-entry-level-2 {
+  width: 80%;
+  margin: 1rem 1rem 0 auto;
+}
+
+.list-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.list-section th,
+.list-section td {
+  line-height: 2.5rem;
+  border-width: 0.1rem 0;
+  text-align: left;
+  vertical-align: bottom;
+  border-style: solid;
+  border-bottom-color: #9E9E9E;
+}
+
+.list-section th {
+  border-top-color: #FFF;
+  color: #9E9E9E;
+  font-weight: normal;
+}
+
+.list-section td {
+  color: black;
+}
+
+.level-1 {
+  width: 95%;
+  padding-left: 0.5rem;
+  margin: 1rem auto 1rem auto;
+}
+
+.level-2, .level-3, .level-4 {
+  padding-left: 1rem;
+  margin: 0 auto 1rem 3rem;
+}
+
+.level-1 input, .level-2 input, .level-3 input, .level-4 input {
+  line-height: 3rem;
+  width: 100%;
+  font-size: 1.2rem;
+  padding-left: 1rem;
+  border-style: solid;
+  border-width: 0 0 0.2rem 0;
+  border-bottom-color: #E0E0E0;
+}
+
+.level-1 label, .level-2 label, .level-3 label, .level-4 label {
+  line-height: 3rem;
+  width: 100%;
+  font-size: 1.2rem;
+  padding-left: 1rem;
+  color: #9E9E9E;
+}
+
+.minus-button {
+  margin-left: 4.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.plus-button {
+  margin-left: 4.8rem;
+}
+
+.operation-block {
+  width: 85%;
+  text-align: center;
+  margin: 1rem auto;
+}
+
+input::placeholder {
+  color: #9E9E9E;
+  font-size: 1.2rem;
+}
+
+input:-ms-input-placeholder {
+  color: #9E9E9E;
+  font-size: 1.2rem;
+}
+
+input::-ms-input-placeholder {
+  color: #9E9E9E;
+  font-size: 1.2rem;
+}
+
+.plus-button, .minus-button {
+    display: block;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: #64B5F6;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.plus-button i, .minus-button i {
+  color: white;
+  line-height: 3.5rem;
+  font-size: 1.8rem;
+}
+
+.plus-button, .minus-button {
+  transition: .3s;
+  box-shadow: 0 0.2rem 0.2rem 0 rgba(0,0,0,.12), 0 0.2rem 0.2rem 0 rgba(0,0,0,.24);
+}
+
+.plus-button:hover, .minus-button:hover {
+  box-shadow: 0 0.4rem 0.5rem 0 rgba(0,0,0,.14), 0 0.1rem 1rem 0 rgba(0,0,0,.12), 0 0.2rem 0.4rem -0.1rem rgba(0,0,0,.2);
+}
+
+.erase-button i, .send-button i {
+  color: #FFC107;
+  transition: .3s;
+  margin: 0 1rem;
+  box-shadow: 0 0.3rem 0.3rem -0.3rem #F5A818;
+}
+
+.erase-button i:hover, .send-button i:hover {
+  box-shadow: 0 1rem 1rem -1rem #F5A818;
+}
+
+.fa-edit, .fa-trash {
+  margin: 0 0.5rem;
+  color: #64B5F6;
+}
+
+.input-section .err-message-box {
+  text-align: center;
+}
+
+.input-section .err-message {
+  color: red;
+}

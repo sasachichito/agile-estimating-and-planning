@@ -1,0 +1,2 @@
+rootProject.name = 'agile-estimating-and-planning'
+include 'iteration', 'release'

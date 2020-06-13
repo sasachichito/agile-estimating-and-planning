@@ -1,0 +1,229 @@
+@charset "UTF-8";
+
+/* --------------------------------
+ * base
+ * -------------------------------- */
+html {
+  height: 100%;
+  font-size: 62.5%;
+}
+
+body {
+  height: 100%;
+  font-size: 1.2rem;
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display:none;
+}
+
+/* --------------------------------
+ * parts
+ * -------------------------------- */
+.clearfix::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* --------------------------------
+ * wrapper
+ * -------------------------------- */
+.wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+/* --------------------------------
+ * sidemenu
+ * -------------------------------- */
+.sidemenu {
+  height: 100%;
+  width: 17%;
+  float: left;
+}
+
+.sidemenu.release { /*  */
+  background-color: #2196F3;
+}
+
+.sidemenu.iteration {/*  */
+  background-color: #03A9F4;
+}
+
+.release-nav, .iteration-nav {
+  height: 6%;
+  width: 100%;
+  overflow: scroll;
+}
+
+.release-nav .toggle, .iteration-nav .toggle {
+  display: block;
+  height: 100%;
+  text-align: center;
+  font-size: 1.4rem;
+  line-height: 4rem;
+  text-decoration: none;
+  letter-spacing: 0.1rem;
+  color: #eceff1;
+}
+
+.toggle:hover {
+  color: #FFF;
+}
+
+.release-nav .toggle.active { /*  */
+  background-color: #1976D2;
+  color: #FFF;
+}
+
+.iteration-nav .toggle.active { /*  */
+  background-color: #039BE5;
+  color: #FFF;
+}
+
+.global-nav {
+  height: calc(88% - 1rem);
+  width: 100%;
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.global-nav ul {
+  height: 100%;
+  overflow: scroll;
+}
+
+.global-nav .nav-item {
+  line-height: 3;
+  width: calc(100% - 1rem);
+  border-style: solid;
+  border-width: 0 0 0 0.4rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  margin: 0 1rem 0 0;
+}
+
+.sidemenu.release .global-nav .nav-item { /*  */
+  border-left-color: #2196F3;
+}
+
+.sidemenu.iteration .global-nav .nav-item { /*  */
+  border-left-color: #03A9F4;
+}
+
+.global-nav .nav-item a {
+  display: block;
+  width: 100%;
+  padding-left: 15%;
+  color: #eceff1;
+  letter-spacing: 0.1rem;
+  text-decoration: none;
+  transition: 0.25s;
+}
+
+.global-nav .nav-item a .left-box {
+  display: inline-block;
+  vertical-align:  middle;
+  width: 75%;
+  overflow: hidden;
+}
+
+.global-nav .nav-item a .right-box {
+  display: inline-block;
+  vertical-align:  middle;
+  width: 10%;
+}
+
+.global-nav .nav-item a .right-box .arrow-right {
+  /* Arrow */
+  width: 0.7rem;
+  height: 0.7rem;
+  border: 0.2rem solid;
+  border-color: #eceff1 #eceff1 transparent transparent;
+  border-radius: 0.2rem;
+  transform: rotate(45deg);
+}
+
+.sidemenu.release .global-nav .nav-item.active { /*  */
+  background-color: #1976D2;
+  border-left-color: #FFC107;
+}
+
+.sidemenu.iteration .global-nav .nav-item.active { /*  */
+  background-color: #039BE5;
+  border-left-color: #FFC107;
+}
+
+.global-nav .nav-item.active a,
+.global-nav .nav-item:hover a {
+  color: #FFF;
+}
+
+/* --------------------------------
+ * main
+ * -------------------------------- */
+.main {
+  display: block; /*For IE*/
+  height: 100%;
+  width: 78%;
+  float: left;
+}
+
+/* --------------------------------
+ * header
+ * -------------------------------- */
+.header {
+  height: 0%;
+  width: 100%;
+  background-color: #1e2f40;
+}
+
+/* --------------------------------
+ * content
+ * -------------------------------- */
+.content {
+  height: 100%;
+  width: 100%;
+  background-color: #f5f5f5;
+}
+
+/* --------------------------------
+ * footer
+ * -------------------------------- */
+.footer {
+  height: 0%;
+  width: 100%;
+  background-color: #1e2f40;
+}
+
+/* --------------------------------
+ * right-side
+ * -------------------------------- */
+.right-side {
+  height: 100%;
+  width: 5%;
+  float: left;
+  overflow: scroll;
+}
+
+.right-side .icons {
+  position: absolute;
+  bottom: 0;
+}
+
+.right-side a {
+  display: block;
+  margin: 2rem 1rem;
+}
+
+.right-side .fa-download,
+.right-side .fa-upload {
+  color: #37474F;
+}
