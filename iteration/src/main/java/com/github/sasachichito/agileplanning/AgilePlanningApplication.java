@@ -28,7 +28,7 @@ public class AgilePlanningApplication {
 					.paths(this.paths())
 					.build()
 				.useDefaultResponseMessages(false)
-				.host("localhost:8081")
+				.host("localhost:8082")
 				.apiInfo(apiInfo());
 	}
 
