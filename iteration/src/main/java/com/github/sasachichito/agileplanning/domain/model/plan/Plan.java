@@ -53,7 +53,12 @@ public class Plan {
     }
 
     public void adjustPeriod(PeriodCalculator periodCalculator) {
-        this.period = periodCalculator.exec(this.scopeId, this.resourceId);
+        try {
+            this.period = periodCalculator.exec(this.scopeId, this.resourceId);
+        } catch (IllegalArgumentException e) {
+            this.remove();
+            throw new IllegalArgumentException(e.getMessage() + " プランID " + this.planId.id() + " を削除します.");
+        }
     }
 
     public TaskMilestoneList taskMilestoneList(MilestoneService milestoneService) {
