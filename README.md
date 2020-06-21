@@ -6,10 +6,14 @@
 
 ## ビルド&サービス起動
 ```
+# Mac,Linux
 ./gradlew :iteration:bootrun :release:bootrun --parallel
+
+# Windows
+.\gradlew.bat :iteration:bootrun :release:bootrun --parallel
 ```
 
-# client
+# Client App
 Chromeから以下にアクセス  
 https://sasachichito.github.io/agile-estimating-and-planning/client/  
 
@@ -32,8 +36,8 @@ https://sasachichito.github.io/agile-estimating-and-planning/client/
 | 任意 | インポート | エクスポートしたファイルをインポート <br/> ※データは上書きされる |
 
 
-# release service
-リリース見積もり・計画サービス  
+# Release Service
+リリースプランニングサービス  
 
 <img src="https://raw.githubusercontent.com/wiki/sasachichito/agile-estimating-and-planning/images/release-domain-model.png" width=450>
 
@@ -59,8 +63,8 @@ https://sasachichito.github.io/agile-estimating-and-planning/client/
 | ベロシティ | 開発チームの単位期間(1日)あたりの消費ストーリーポイント |
 | コスト | 開発チームの単位期間(1日)あたりの費用 |
 
-# iteration service
-イテレーション毎の見積もり・計画サービス  
+# Iteration Service
+イテレーションプランニングサービス  
 
 <img src="https://raw.githubusercontent.com/wiki/sasachichito/agile-estimating-and-planning/images/iteration-domain-model.png" width=450>
 

@@ -29,7 +29,7 @@ public class PeriodCalculator {
             return resource.periodForFinishUp(scopeIdealHours);
         }
 
-        throw new IllegalArgumentException("ResourceId " + resourceId.id() + " は"
-                + "ScopeId " + scopeId.id() + " の理想時間を燃焼しきれません。");
+        throw new IllegalArgumentException("リソースID " + resourceId.id() + " は"
+                + "スコープID " + scopeId.id() + " の理想時間を燃焼しきれません。");
     }
 }
