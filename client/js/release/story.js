@@ -146,7 +146,7 @@ export default class extends release {
         );
 
         this.section.inputBlock1().appendChild(
-            this.makeILinks([])
+            this.makeILinks([""])
         );
 
         this.section.inputBlock1().appendChild(

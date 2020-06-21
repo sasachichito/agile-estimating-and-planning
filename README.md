@@ -2,7 +2,7 @@
 [<img src="https://images-fe.ssl-images-amazon.com/images/I/51A6GGDWeaL.jpg" width=250>](https://www.amazon.co.jp/dp/B00IR1HYGW/ref=dp-kindle-redirect?_encoding=UTF8&btkr=1)
 
 ## アーキテクチャ
-<img src="https://raw.githubusercontent.com/wiki/sasachichito/agile-estimating-and-planning/images/architecture.png" width=250>
+<img src="https://raw.githubusercontent.com/wiki/sasachichito/agile-estimating-and-planning/images/architecture.png" width=300>
 
 ## ビルド&サービス起動
 ```
@@ -10,17 +10,18 @@
 ```
 
 # client
+Chromeから以下にアクセス  
 https://sasachichito.github.io/agile-estimating-and-planning/client/  
 
-## Usage
+### Usage
 | Step | 項目 | 備考 |
 | :--- | :--- | :--- |
-| 1. | リリースプランニング | 1プロジェクトに対して1回実施 |
+| 1. | リリースプランニング | プロジェクトに対して1回実施 |
 | 1.1 | 　　ストーリー見積もり・登録 ||
 | 1.2 | 　　スコープ登録 ||
 | 1.3 | 　　リソース登録 ||
 | 1.4 | 　　プラン登録 ||
-| 2. | イテレーションプランニング | 1プロジェクトに対してn回実施 |
+| 2. | イテレーションプランニング | プロジェクトに対してn回実施 |
 | 2.1 | 　　タスク見積もり・登録 ||
 | 2.2 | 　　スコープ登録 ||
 | 2.3 | 　　リソース登録 ||
@@ -86,7 +87,7 @@ https://sasachichito.github.io/agile-estimating-and-planning/client/
 | 1日あたりの稼働時間 | 単位期間(1日)あたりの稼働の理想時間 <br/> ※8h勤務の開発者はおおよそ6〜7h |
 
 # 共通用語
-|  ||
+|||
 | :--- | :--- |
 | Burn(バーン) | 何らかの作業を完了すること |
 | バーンダウンチャート | プランの進捗状況を示すチャート |
