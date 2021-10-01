@@ -46,8 +46,8 @@ public class AgilePlanningApplication {
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
-				.title("agile iteration planning")
-				.description("This is a agile iteration planning api.")
+				.title("Agile Iteration Planning")
+				.description("This is a Agile Iteration Planning API.")
 				.version("1.0.0")
 				.build();
 	}

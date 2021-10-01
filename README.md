@@ -6,7 +6,11 @@
 
 ## ビルド&サービス起動
 ```
+# Mac,Linux
 ./gradlew :iteration:bootrun :release:bootrun --parallel
+
+# Windows
+.\gradlew.bat :iteration:bootrun :release:bootrun --parallel
 ```
 
 # Client App
@@ -32,10 +36,13 @@ https://sasachichito.github.io/agile-estimating-and-planning/client/
 | 任意 | インポート | エクスポートしたファイルをインポート <br/> ※データは上書きされる |
 
 
-# Release service
+# Release Service
 リリースプランニングサービス  
 
 <img src="https://raw.githubusercontent.com/wiki/sasachichito/agile-estimating-and-planning/images/release-domain-model.png" width=450>
+
+OpenAPI（Swagger UI）  
+http://localhost:8081/swagger-ui.html
 
 | Plan(プラン) ||
 | :--- | :--- |
@@ -59,10 +66,17 @@ https://sasachichito.github.io/agile-estimating-and-planning/client/
 | ベロシティ | 開発チームの単位期間(1日)あたりの消費ストーリーポイント |
 | コスト | 開発チームの単位期間(1日)あたりの費用 |
 
-# Iteration service
+### 注意事項
+祝日に変更があった場合には以下のファイルを修正すること  
+https://github.com/sasachichito/agile-estimating-and-planning/blob/master/release/src/main/java/com/github/sasachichito/agileplanning/domain/model/period/HolidayList.java
+
+# Iteration Service
 イテレーションプランニングサービス  
 
 <img src="https://raw.githubusercontent.com/wiki/sasachichito/agile-estimating-and-planning/images/iteration-domain-model.png" width=450>
+
+OpenAPI（Swagger UI）  
+http://localhost:8082/swagger-ui.html
 
 | Plan(プラン) ||
 | :--- | :--- |
@@ -85,6 +99,10 @@ https://sasachichito.github.io/agile-estimating-and-planning/client/
 | リソース | 開発チームの稼働時間と費用 |
 | メンバー | 開発者 |
 | 1日あたりの稼働時間 | 単位期間(1日)あたりの稼働の理想時間 <br/> ※8h勤務の開発者はおおよそ6〜7h |
+
+### 注意事項
+祝日に変更があった場合は以下のファイルを修正すること  
+https://github.com/sasachichito/agile-estimating-and-planning/blob/master/iteration/src/main/java/com/github/sasachichito/agileplanning/domain/model/period/HolidayList.java
 
 # 共通用語
 |||

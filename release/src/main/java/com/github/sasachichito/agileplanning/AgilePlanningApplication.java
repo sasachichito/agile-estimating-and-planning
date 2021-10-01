@@ -46,8 +46,8 @@ public class AgilePlanningApplication {
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
-				.title("agile release planning")
-				.description("This is a agile release planning api.")
+				.title("Agile Release Planning")
+				.description("This is a Agile Release Planning API.")
 				.version("1.0.0")
 				.build();
 	}

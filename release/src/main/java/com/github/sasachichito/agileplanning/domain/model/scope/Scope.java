@@ -74,10 +74,14 @@ public class Scope {
     }
 
     public void removeStory(StoryId aStoryId) {
-        // TODO 仕様クラスによるバリデーション
-        this.storyIdList = this.storyIdList.stream()
+        var aStoryIdList = this.storyIdList.stream()
                 .filter(storyId -> !storyId.equals(aStoryId))
                 .collect(Collectors.toList());
+        if (aStoryIdList.isEmpty()) {
+            this.remove();
+            return;
+        }
+        this.storyIdList = aStoryIdList;
         DomainEventPublisher.instance().publish(new ScopeChanged(this));
     }
 
