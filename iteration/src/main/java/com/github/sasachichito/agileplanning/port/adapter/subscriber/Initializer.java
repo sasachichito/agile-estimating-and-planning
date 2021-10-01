@@ -45,6 +45,8 @@ public class Initializer {
 
         ScopeIdealHoursLogger.instance().init(
                 this.storyRepository,
+                this.resourceRepository,
+                this.burnRepository,
                 this.planRepository,
                 this.scopeRepository,
                 this.burndownChartService);

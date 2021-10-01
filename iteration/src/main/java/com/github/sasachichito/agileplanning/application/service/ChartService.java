@@ -44,4 +44,8 @@ public class ChartService {
                 burnList.burnIncrement(plan.period(), new BurnHoursCalculator(this.scopeRepository, this.storyRepository))
         );
     }
+
+    public List<BurndownLineChart> burndownLineCharts(PlanId planId) {
+        return this.burndownChartService.getLineCharts(planId);
+    }
 }

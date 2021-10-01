@@ -10,7 +10,9 @@ import java.util.List;
 public interface BurndownChartService {
     List<ScopeIdealHoursLog> get(PlanId planId);
     List<ScopeIdealHoursLog> getAll();
-    void save(ScopeIdealHoursLog scopeIdealHoursLog);
+    void saveLog(ScopeIdealHoursLog scopeIdealHoursLog);
+    void saveChart(BurndownLineChart burndownLineChart);
     BurndownLineChart getLineChart(Plan plan, Resource resource, BurnIncrement burnIncrement);
+    List<BurndownLineChart> getLineCharts(PlanId planId);
     void flash();
 }

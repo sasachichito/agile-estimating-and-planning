@@ -160,7 +160,7 @@ public class AdministrationTool {
                     new ScopeIdealHours(request.scopeIdealHours),
                     ScopeIdealHoursLog.ChangeType.valueOf(request.changeType)
             );
-            this.burndownChartService.save(scopeIdealHoursLog);
+            this.burndownChartService.saveLog(scopeIdealHoursLog);
         });
     }
 }

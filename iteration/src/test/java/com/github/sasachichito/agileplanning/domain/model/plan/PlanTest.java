@@ -50,7 +50,7 @@ class PlanTest {
                             LocalDate.of(2020, 1,31))
             );
 
-            verify(this.burndownChartService, times(1)).save(any());
+            verify(this.burndownChartService, times(1)).saveLog(any());
         } catch (Exception e) {
             fail();
         }

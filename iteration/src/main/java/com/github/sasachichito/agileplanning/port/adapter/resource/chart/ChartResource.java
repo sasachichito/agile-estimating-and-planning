@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Api(value = "Chart", description = "チャート", tags = { "Chart" })
 @RestController
 @RequiredArgsConstructor
@@ -24,5 +27,14 @@ public class ChartResource {
         return new JsonBurndownLineChart(
                 this.chartService.burndownLineChart(new PlanId(planId))
         );
+    }
+
+    @ApiOperation(value = "バーンダウンチャートリスト取得")
+    @GetMapping("burndown/lines/{planId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<JsonBurndownLineChart> burnDownCharts(@PathVariable int planId) {
+        return this.chartService.burndownLineCharts(new PlanId(planId)).stream()
+                .map(JsonBurndownLineChart::new)
+                .collect(Collectors.toList());
     }
 }
