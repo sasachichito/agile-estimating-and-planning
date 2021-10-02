@@ -84,8 +84,9 @@ export default class extends iteration {
         this.section.resultBlock1().appendChild(canvas);
 
         var planId = utilInstance().valueOfInputById("planId");
-        var url = this.baseUrl + "charts/burndown/line/" + planId;
+        var url = this.baseUrl + "charts/burndown/lines/" + planId;
         var json = await this.webApi.get(url);
+
         this.buildChart(json);
     }
 
@@ -93,53 +94,49 @@ export default class extends iteration {
 	    console.log(jsonText);
 	    var jsonObj = JSON.parse(jsonText);
 
-        var myLineChart = new Chart(document.getElementById("iteration-dashboard-line-chart"), {
-            type: 'line',
-            data: {
-              labels: jsonObj.period,
-              datasets: [
-                {
-                  label: 'Initial Plan',
-                  lineTension: 0,
-                  borderDash: [8, 5],
-                  data: jsonObj.initialPlan,
-                  borderColor: "rgba(0,0,255,1)",
-                  backgroundColor: "rgba(0,0,0,0)"
-                },
-                {
-                  label: 'Changed Plan',
-                  lineTension: 0,
-                  data: jsonObj.changedPlan,
-                  borderColor: "rgba(0,255,0,1)",
-                  backgroundColor: "rgba(0,0,0,0)"
-                },
-                {
-                  label: 'Actual Result',
-                  lineTension: 0,
-                  data: jsonObj.actualResult,
-                  borderColor: "rgba(255,0,0,1)",
-                  backgroundColor: "rgba(0,0,0,0)"
-                }
-              ],
-            },
-            options: {
-              title: {
-                display: true,
-                text: 'Burndown Line Chart'
-              },
-              scales: {
-                yAxes: [{
-                  ticks: {
-                    suggestedMin: 0,
-                    stepSize: 5,
-                    callback: function(value, index, values){
-                      return  value +  'h'
-                    }
+        for (var oneChart of jsonObj) {
+          var canvas2 = document.createElement('canvas');
+          this.section.resultBlock1().appendChild(canvas2);
+          var myLineChart = new Chart(canvas2, {
+              type: 'line',
+              data: {
+                labels: oneChart.period,
+                datasets: [
+                  {
+                    label: 'Changed Plan',
+                    lineTension: 0,
+                    data: oneChart.changedPlan,
+                    borderColor: "rgba(0,255,0,1)",
+                    backgroundColor: "rgba(0,0,0,0)"
+                  },
+                  {
+                    label: 'Actual Result',
+                    lineTension: 0,
+                    data: oneChart.actualResult,
+                    borderColor: "rgba(255,0,0,1)",
+                    backgroundColor: "rgba(0,0,0,0)"
                   }
-                }]
+                ],
               },
-            }
-        });
+              options: {
+                title: {
+                  display: true,
+                  text: [oneChart.updatedDateTime, oneChart.comment]
+                },
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      suggestedMin: 0,
+                      stepSize: 5,
+                      callback: function(value, index, values){
+                        return  value +  'h'
+                      }
+                    }
+                  }]
+                },
+              }
+          });
+        };
     }
 
     async viewMilestone() {

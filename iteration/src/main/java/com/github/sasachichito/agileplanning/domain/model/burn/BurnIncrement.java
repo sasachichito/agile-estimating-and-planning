@@ -12,6 +12,6 @@ public class BurnIncrement {
     }
 
     public BigDecimal hoursAt(LocalDate localDate) {
-        return this.incrementedHours.get(localDate);
+        return this.incrementedHours.getOrDefault(localDate, BigDecimal.ZERO);
     }
 }

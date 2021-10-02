@@ -33,7 +33,7 @@ public class ChartResource {
     @GetMapping("burndown/lines/{planId}")
     @ResponseStatus(HttpStatus.OK)
     public List<JsonBurndownLineChart> burnDownCharts(@PathVariable int planId) {
-        return this.chartService.burndownLineCharts(new PlanId(planId)).stream()
+        return this.chartService.burndownLineCharts(new PlanId(planId)).burndownLineChartList().stream()
                 .map(JsonBurndownLineChart::new)
                 .collect(Collectors.toList());
     }

@@ -1,6 +1,7 @@
 package com.github.sasachichito.agileplanning.domain.model.chart;
 
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanId;
+import com.github.sasachichito.agileplanning.domain.model.scope.ScopeIdealHours;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -13,7 +14,8 @@ import java.util.List;
 @Getter
 public class BurndownLineChart {
     private PlanId planId;
-    private LocalDateTime localDateTime;
+    private LocalDateTime updatedDateTime;
+    private ScopeIdealHours scopeIdealHours;
     private List<LocalDate> period;
     private List<BigDecimal> initialPlan;
     private List<BigDecimal> changedPlan;
@@ -29,20 +31,39 @@ public class BurndownLineChart {
 
     public BurndownLineChart(
             PlanId planId,
-            LocalDateTime localDateTime,
+            LocalDateTime updatedDateTime,
             List<LocalDate> period,
             List<BigDecimal> initialPlan,
             List<BigDecimal> changedPlan,
             List<BigDecimal> actualResult
     ) {
         this.planId = planId;
-        this.localDateTime = localDateTime;
+        this.updatedDateTime = updatedDateTime;
         this.period = period;
         this.initialPlan = initialPlan;
         this.changedPlan = changedPlan;
         this.actualResult = actualResult;
+        this.comment = "test comment";
     }
 
+    public BurndownLineChart(
+            PlanId planId,
+            LocalDateTime updatedDateTime,
+            ScopeIdealHours scopeIdealHours,
+            List<LocalDate> period,
+//            List<BigDecimal> initialPlan,
+            List<BigDecimal> changedPlan
+    ) {
+        this.planId = planId;
+        this.updatedDateTime = updatedDateTime;
+        this.period = period;
+//        this.initialPlan = initialPlan;
+        this.changedPlan = changedPlan;
+        this.scopeIdealHours = scopeIdealHours;
+        this.comment = "test comment";
+    }
+
+    public void setActualResult(List<BigDecimal> actualResult) { this.actualResult = actualResult; }
     public void setComment(String comment) {
         this.comment = comment;
     }

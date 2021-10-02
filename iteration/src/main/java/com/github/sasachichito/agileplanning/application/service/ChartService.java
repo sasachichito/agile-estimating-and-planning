@@ -3,6 +3,7 @@ package com.github.sasachichito.agileplanning.application.service;
 import com.github.sasachichito.agileplanning.domain.model.burn.*;
 import com.github.sasachichito.agileplanning.domain.model.chart.BurndownChartService;
 import com.github.sasachichito.agileplanning.domain.model.chart.BurndownLineChart;
+import com.github.sasachichito.agileplanning.domain.model.chart.BurndownLineChartList;
 import com.github.sasachichito.agileplanning.domain.model.plan.Plan;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanId;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanRepository;
@@ -45,7 +46,7 @@ public class ChartService {
         );
     }
 
-    public List<BurndownLineChart> burndownLineCharts(PlanId planId) {
+    public BurndownLineChartList burndownLineCharts(PlanId planId) {
         return this.burndownChartService.getLineCharts(planId);
     }
 }

@@ -72,7 +72,7 @@ public class ScopeIdealHoursLogger implements
 
                     this.burndownChartService.saveLog(scopeIdealHoursLog);
 
-                    this.saveBurndownChart(plan);
+                    this.saveBurndownChart(plan, scopeIdealHours);
                 });
     }
 
@@ -92,42 +92,31 @@ public class ScopeIdealHoursLogger implements
 
                     this.burndownChartService.saveLog(scopeIdealHoursLog);
 
-                    this.saveBurndownChart(plan);
+                    this.saveBurndownChart(plan, scopeIdealHours);
                 });
     }
 
     @Override
     public void handle(PlanCreated planCreated) {
-        Scope scope = this.scopeRepository.get(planCreated.plan().scopeId());
+        ScopeIdealHours scopeIdealHours = scopeRepository.get(planCreated.plan().scopeId()).idealHours(
+                new ScopeIdealHoursCalculator(this.storyRepository));
 
         this.burndownChartService.saveLog(
                 new ScopeIdealHoursLog(
                         planCreated.plan().planId(),
                         LocalDateTime.now(),
-                        scope.idealHours(
-                                new ScopeIdealHoursCalculator(this.storyRepository)),
+                        scopeIdealHours,
                         ScopeIdealHoursLog.ChangeType.INITIAL
                 ));
 
-        this.saveBurndownChart(planCreated.plan());
+        this.saveBurndownChart(planCreated.plan(), scopeIdealHours);
     }
 
-    private void saveBurndownChart(Plan plan) {
-        Resource resource = this.resourceRepository.get(plan.resourceId());
-
-        List<Burn> aBurnList = this.burnRepository.getAll().stream()
-                .filter(burn -> burn.isRelated(
-                        plan.scopeId(),
-                        new BurnRelationChecker(this.scopeRepository, this.storyRepository)))
-                .collect(Collectors.toList());
-
-        BurnList burnList = new BurnList(aBurnList);
-
-        var burndownLineChart = burndownChartService.getLineChart(
+    private void saveBurndownChart(Plan plan, ScopeIdealHours scopeIdealHours) {
+        var burndownLineChart = burndownChartService.makeLineChart(
                 plan,
-                resource,
-                burnList.burnIncrement(plan.period(), new BurnHoursCalculator(this.scopeRepository, this.storyRepository))
-        );
+                this.resourceRepository.get(plan.resourceId()),
+                scopeIdealHours);
 
         burndownChartService.saveChart(burndownLineChart);
     }

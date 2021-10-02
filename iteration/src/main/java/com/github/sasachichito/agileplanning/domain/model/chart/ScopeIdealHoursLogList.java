@@ -6,8 +6,11 @@ import com.github.sasachichito.agileplanning.domain.model.scope.ScopeIdealHours;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class ScopeIdealHoursLogList {
     private List<ScopeIdealHoursLog> scopeIdealHoursLogList;
@@ -39,19 +42,14 @@ public class ScopeIdealHoursLogList {
     }
 
     public BigDecimal hoursAt(LocalDate localDate) {
-        ScopeIdealHoursLog lastLog = this.scopeIdealHoursLogList.stream()
-                .filter(scopePointLog -> scopePointLog.dateTime().toLocalDate()
-                        .isBefore(localDate))
-                .max(Comparator.comparing(ScopeIdealHoursLog::dateTime))
-                .orElse(this.initialLog());
-
+        // 指定日と同日か古いのログのうち、最新のログの理想時間
         return this.scopeIdealHoursLogList.stream()
-                .filter(scopePointLog -> scopePointLog.dateTime().toLocalDate()
-                        .equals(localDate))
+                .filter(scopePointLog -> scopePointLog.dateTime().toLocalDate().equals(localDate)
+                        || scopePointLog.dateTime().toLocalDate().isBefore(localDate))
                 .max(Comparator.comparing(ScopeIdealHoursLog::dateTime))
-                .map(ScopeIdealHoursLog::scopeIdealHours)
-                .map(ScopeIdealHours::hours)
-                .orElse(lastLog.scopeIdealHours().hours());
+                .map(log -> log.scopeIdealHours().hours())
+                // 存在しない場合はイニシャルログの理想時間
+                .orElse(this.initialLog().scopeIdealHours().hours());
     }
 
     private ScopeIdealHoursLog initialLog() {
