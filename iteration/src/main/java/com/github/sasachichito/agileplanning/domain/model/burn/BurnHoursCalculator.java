@@ -1,5 +1,6 @@
 package com.github.sasachichito.agileplanning.domain.model.burn;
 
+import com.github.sasachichito.agileplanning.domain.model.plan.Plan;
 import com.github.sasachichito.agileplanning.domain.model.scope.*;
 import com.github.sasachichito.agileplanning.domain.model.story.ControlRateForTask;
 import com.github.sasachichito.agileplanning.domain.model.story.Story;
@@ -17,13 +18,14 @@ public class BurnHoursCalculator {
         this.storyRepository = storyRepository;
     }
 
-    public BigDecimal calculate(Burn burn) {
+    public BigDecimal calculate(Plan plan, Burn burn) {
         Story story = this.storyRepository.getAll().stream()
                 .filter(aStory -> aStory.hasTask(burn.taskId()))
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("タスクが存在しません。"));
 
         Scope scope = this.scopeRepository.getAll().stream()
                 .filter(aScope -> aScope.hasStory(story.storyId()))
+                .filter(aScope -> plan.hasScope(aScope.scopeId()))
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("ストーリーが存在しません。"));
 
         ControlRateForStory controlRateForStory = scope.controlRateForStory(

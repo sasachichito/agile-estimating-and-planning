@@ -4,6 +4,7 @@ import com.github.sasachichito.agileplanning.domain.model.burn.BurnHoursCalculat
 import com.github.sasachichito.agileplanning.domain.model.burn.BurnIncrement;
 import com.github.sasachichito.agileplanning.domain.model.burn.BurnList;
 import com.github.sasachichito.agileplanning.domain.model.period.Period;
+import com.github.sasachichito.agileplanning.domain.model.plan.Plan;
 import com.github.sasachichito.agileplanning.domain.model.scope.ScopeIdealHours;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -29,7 +30,7 @@ public class BurndownLineChartList {
         this.burndownLineChartList = burndownLineChartList;
     }
 
-    public void setActualResult(BurnList burnList, BurnHoursCalculator burnHoursCalculator) {
+    public void setActualResult(Plan plan, BurnList burnList, BurnHoursCalculator burnHoursCalculator) {
         // 実績をプロットする
         // チャートをループ
             // 日付リストをループ
@@ -40,6 +41,7 @@ public class BurndownLineChartList {
         this.burndownLineChartList.forEach(chart -> {
             List<BigDecimal> actualResult = new ArrayList<>();
             BurnIncrement burnIncrement = burnList.burnIncrement(
+                    plan,
                     new Period(chart.period().get(0), chart.period().get(chart.period().size() -1)),
                     burnHoursCalculator);
 

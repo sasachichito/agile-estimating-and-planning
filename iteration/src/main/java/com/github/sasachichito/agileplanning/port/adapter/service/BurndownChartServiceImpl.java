@@ -78,8 +78,6 @@ public class BurndownChartServiceImpl implements BurndownChartService {
 
         List<LocalDate> period = getPeriod(workDayList, previousWorkDay);
 
-//        List<BigDecimal> initialPlan = getInitialPlan(plan, resource, workDayList, scopeIdealHoursLogList);
-
         List<BigDecimal> changedPlan = getChangedPlan(plan, resource, workDayList, previousWorkDay, scopeIdealHoursLogList);
 
         return new BurndownLineChart(
@@ -87,33 +85,7 @@ public class BurndownChartServiceImpl implements BurndownChartService {
                 LocalDateTime.now(),
                 scopeIdealHours,
                 period,
-//                initialPlan,
                 changedPlan);
-    }
-
-    @Override
-    public BurndownLineChart getLineChart(Plan plan, Resource resource, BurnIncrement burnIncrement) {
-        List<WorkDay> workDayList = WorkDayListGenerator.exec(plan.period().start(), plan.period().end());
-        WorkDay previousWorkDay = WorkDayListGenerator.previousWorkDayOf(plan.period().start());
-
-        ScopeIdealHoursLogList scopeIdealHoursLogList = new ScopeIdealHoursLogList(
-                this.get(plan.planId()));
-
-        List<LocalDate> period = getPeriod(workDayList, previousWorkDay);
-
-        List<BigDecimal> initialPlan = getInitialPlan(plan, resource, workDayList, scopeIdealHoursLogList);
-
-        List<BigDecimal> changedPlan = getChangedPlan(plan, resource, workDayList, previousWorkDay, scopeIdealHoursLogList);
-
-        List<BigDecimal> actualResult = getActualResult(burnIncrement, workDayList, previousWorkDay, scopeIdealHoursLogList);
-
-        return new BurndownLineChart(
-                plan.planId(),
-                LocalDateTime.now(),
-                period,
-                initialPlan,
-                changedPlan,
-                actualResult);
     }
 
     @Override
@@ -133,7 +105,7 @@ public class BurndownChartServiceImpl implements BurndownChartService {
         BurnList burnList = new BurnList(aBurnList);
 
         BurndownLineChartList burndownLineChartList = new BurndownLineChartList(this.burndownLineChartMap.get(planId));
-        burndownLineChartList.setActualResult(burnList, new BurnHoursCalculator(this.scopeRepository, this.storyRepository));
+        burndownLineChartList.setActualResult(plan, burnList, new BurnHoursCalculator(this.scopeRepository, this.storyRepository));
 
         return burndownLineChartList;
     }
@@ -146,16 +118,6 @@ public class BurndownChartServiceImpl implements BurndownChartService {
         return period;
     }
 
-    private List<BigDecimal> getInitialPlan(Plan plan, Resource resource, List<WorkDay> workDayList, ScopeIdealHoursLogList scopeIdealHoursLogList) {
-        List<BigDecimal> initialPlan = workDayList.stream()
-                .map(workDay -> scopeIdealHoursLogList.expectedLeftHoursIgnoreChange(
-                        workDay.localDate(), resource.increasedWorkingHours(plan.period())
-                ))
-                .collect(Collectors.toList());
-        initialPlan.add(0, scopeIdealHoursLogList.initialHours());
-        return initialPlan;
-    }
-
     private List<BigDecimal> getChangedPlan(Plan plan, Resource resource, List<WorkDay> workDayList, WorkDay previousWorkDay, ScopeIdealHoursLogList scopeIdealHoursLogList) {
         List<BigDecimal> changedPlan = workDayList.stream()
                 .map(workDay -> scopeIdealHoursLogList.expectedLeftHours(
@@ -164,19 +126,6 @@ public class BurndownChartServiceImpl implements BurndownChartService {
                 .collect(Collectors.toList());
         changedPlan.add(0, scopeIdealHoursLogList.hoursAt(previousWorkDay.localDate()));
         return changedPlan;
-    }
-
-    private List<BigDecimal> getActualResult(BurnIncrement burnIncrement, List<WorkDay> workDayList, WorkDay previousWorkDay, ScopeIdealHoursLogList scopeIdealHoursLogList) {
-        List<BigDecimal> actualResult = workDayList.stream()
-                .filter(workDay ->
-                        workDay.localDate().isBefore(LocalDate.now())
-                                || workDay.localDate().equals(LocalDate.now()))
-                .map(workDay -> scopeIdealHoursLogList.resultLeftHours(
-                        workDay.localDate(), burnIncrement
-                ))
-                .collect(Collectors.toList());
-        actualResult.add(0, scopeIdealHoursLogList.hoursAt(previousWorkDay.localDate()));
-        return actualResult;
     }
 
     @Override

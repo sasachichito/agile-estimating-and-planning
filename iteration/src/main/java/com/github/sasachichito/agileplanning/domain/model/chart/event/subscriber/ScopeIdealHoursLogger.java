@@ -1,16 +1,13 @@
 package com.github.sasachichito.agileplanning.domain.model.chart.event.subscriber;
 
-import com.github.sasachichito.agileplanning.domain.model.burn.*;
 import com.github.sasachichito.agileplanning.domain.model.chart.BurndownChartService;
 import com.github.sasachichito.agileplanning.domain.model.chart.ScopeIdealHoursLog;
 import com.github.sasachichito.agileplanning.domain.model.event.DomainEvent;
 import com.github.sasachichito.agileplanning.domain.model.plan.Plan;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanRepository;
 import com.github.sasachichito.agileplanning.domain.model.plan.event.PlanCreated;
-import com.github.sasachichito.agileplanning.domain.model.resource.Resource;
 import com.github.sasachichito.agileplanning.domain.model.resource.ResourceRepository;
 import com.github.sasachichito.agileplanning.domain.model.resource.event.ResourceChanged;
-import com.github.sasachichito.agileplanning.domain.model.scope.Scope;
 import com.github.sasachichito.agileplanning.domain.model.scope.ScopeIdealHours;
 import com.github.sasachichito.agileplanning.domain.model.scope.ScopeIdealHoursCalculator;
 import com.github.sasachichito.agileplanning.domain.model.scope.ScopeRepository;
@@ -18,8 +15,6 @@ import com.github.sasachichito.agileplanning.domain.model.scope.event.ScopeChang
 import com.github.sasachichito.agileplanning.domain.model.story.StoryRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ScopeIdealHoursLogger implements
         ScopeChanged.Subscriber,
@@ -35,7 +30,6 @@ public class ScopeIdealHoursLogger implements
 
     private StoryRepository storyRepository;
     private ResourceRepository resourceRepository;
-    private BurnRepository burnRepository;
     private PlanRepository planRepository;
     private ScopeRepository scopeRepository;
     private BurndownChartService burndownChartService;
@@ -43,14 +37,12 @@ public class ScopeIdealHoursLogger implements
     public void init(
             StoryRepository storyRepository,
             ResourceRepository resourceRepository,
-            BurnRepository burnRepository,
             PlanRepository planRepository,
             ScopeRepository scopeRepository,
             BurndownChartService burndownChartService
     ) {
         this.storyRepository = storyRepository;
         this.resourceRepository = resourceRepository;
-        this.burnRepository = burnRepository;
         this.planRepository = planRepository;
         this.scopeRepository = scopeRepository;
         this.burndownChartService = burndownChartService;
