@@ -7,10 +7,7 @@ import com.github.sasachichito.agileplanning.application.command.scope.ScopeUpda
 import com.github.sasachichito.agileplanning.application.command.story.StoryUpdateCmd;
 import com.github.sasachichito.agileplanning.application.service.*;
 import com.github.sasachichito.agileplanning.domain.model.burn.BurnRepository;
-import com.github.sasachichito.agileplanning.domain.model.chart.BurndownChartService;
-import com.github.sasachichito.agileplanning.domain.model.chart.ChartRepository;
-import com.github.sasachichito.agileplanning.domain.model.chart.ScopeIdealHoursLog;
-import com.github.sasachichito.agileplanning.domain.model.chart.ScopeIdealHoursLogRepository;
+import com.github.sasachichito.agileplanning.domain.model.chart.*;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanId;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanRepository;
 import com.github.sasachichito.agileplanning.domain.model.resource.ResourceRepository;
@@ -33,8 +30,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Api(value = "Administration Tool", description = "管理ツール",  tags = { "Administration Tool" })
@@ -63,7 +62,6 @@ public class AdministrationTool {
     private final BurnRepository burnRepository;
     private final ScopeIdealHoursLogRepository scopeIdealHoursLogRepository;
     private final ChartRepository chartRepository;
-    private final BurndownChartService burndownChartService;
 
     @ApiOperation(value = "データエクスポート")
     @GetMapping("/export")
@@ -171,6 +169,32 @@ public class AdministrationTool {
             this.scopeIdealHoursLogRepository.saveLog(scopeIdealHoursLog);
         });
 
+        importModel.burndownLineCharts.forEach(request -> {
+            BurndownLineChart burndownLineChart = new BurndownLineChart(
+                    new PlanId(request.planId),
+                    request.version,
+                    LocalDateTime.parse(request.updatedDateTime, DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm:ss")),
+                    new ScopeIdealHours(request.scopeIdealHours),
+                    request.period.stream()
+                        .map(date -> LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy/MM/d")))
+                        .collect(Collectors.toList()),
+                    request.changedPlan,
+                    request.comment
+            );
+            this.chartRepository.add(burndownLineChart);
+        });
+    }
 
+    @ApiOperation(value = "データクリア")
+    @PostMapping("/clear")
+    @ResponseStatus(HttpStatus.OK)
+    public void flash() {
+        this.storyRepository.flash();
+        this.scopeRepository.flash();
+        this.resourceRepository.flash();
+        this.planRepository.flash();
+        this.burnRepository.flash();
+        this.scopeIdealHoursLogRepository.flash();
+        this.chartRepository.flash();
     }
 }

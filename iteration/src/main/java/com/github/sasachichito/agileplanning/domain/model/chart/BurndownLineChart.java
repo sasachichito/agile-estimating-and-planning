@@ -54,6 +54,24 @@ public class BurndownLineChart {
         this.comment = "test comment";
     }
 
+    public BurndownLineChart(
+            PlanId planId,
+            Integer version,
+            LocalDateTime updatedDateTime,
+            ScopeIdealHours scopeIdealHours,
+            List<LocalDate> period,
+            List<BigDecimal> changedPlan,
+            String comment
+    ) {
+        this.planId = planId;
+        this.version = version;
+        this.updatedDateTime = updatedDateTime;
+        this.period = period;
+        this.changedPlan = changedPlan;
+        this.scopeIdealHours = scopeIdealHours;
+        this.comment = comment;
+    }
+
     public boolean isVersion(int version) {
         return this.version == version;
     }

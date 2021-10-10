@@ -91,8 +91,8 @@ public class BurndownChartServiceImpl implements BurndownChartService {
         return burndownLineChartList;
     }
 
-    public BurndownLineChartList getLineCharts() {
-        return new BurndownLineChartList(this.chartRepository.getAll());
+    public List<BurndownLineChart> getLineCharts() {
+        return this.chartRepository.getAll();
     }
 
     private List<LocalDate> getPeriod(List<WorkDay> workDayList, WorkDay previousWorkDay) {

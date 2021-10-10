@@ -25,7 +25,7 @@ public class BurndownLineChartList {
                 .map(BurndownLineChart::planId)
                 .distinct()
                 .count() > 1) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("プランIDの異なるチャートが含まれています.");
         }
         this.burndownLineChartList = burndownLineChartList;
     }

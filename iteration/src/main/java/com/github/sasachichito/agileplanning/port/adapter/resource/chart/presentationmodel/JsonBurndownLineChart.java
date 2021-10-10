@@ -15,19 +15,25 @@ public class JsonBurndownLineChart {
 
     private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/M/d");
 
+    private int planId;
     private List<String> period;
     private Integer version;
+    private BigDecimal scopeIdealHours;
     private List<BigDecimal> changedPlan;
     private List<BigDecimal> actualResult;
     private String updatedDateTime;
     private String comment;
 
     public JsonBurndownLineChart(BurndownLineChart burndownLineChart) {
+        this.planId = burndownLineChart.planId().id();
+
         this.period = burndownLineChart.period().stream()
                 .map(date -> date.format(dtf))
                 .collect(Collectors.toList());
 
         this.version = burndownLineChart.version();
+
+        this.scopeIdealHours = burndownLineChart.scopeIdealHours().hours();
 
         this.changedPlan = burndownLineChart.changedPlan().stream()
                 .map(b -> b.setScale(1, RoundingMode.HALF_UP))
