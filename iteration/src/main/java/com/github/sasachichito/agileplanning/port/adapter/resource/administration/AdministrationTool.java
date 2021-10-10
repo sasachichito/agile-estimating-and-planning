@@ -8,7 +8,9 @@ import com.github.sasachichito.agileplanning.application.command.story.StoryUpda
 import com.github.sasachichito.agileplanning.application.service.*;
 import com.github.sasachichito.agileplanning.domain.model.burn.BurnRepository;
 import com.github.sasachichito.agileplanning.domain.model.chart.BurndownChartService;
+import com.github.sasachichito.agileplanning.domain.model.chart.ChartRepository;
 import com.github.sasachichito.agileplanning.domain.model.chart.ScopeIdealHoursLog;
+import com.github.sasachichito.agileplanning.domain.model.chart.ScopeIdealHoursLogRepository;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanId;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanRepository;
 import com.github.sasachichito.agileplanning.domain.model.resource.ResourceRepository;
@@ -19,6 +21,7 @@ import com.github.sasachichito.agileplanning.port.adapter.resource.administratio
 import com.github.sasachichito.agileplanning.port.adapter.resource.administration.presentationmodel.external.JsonScopeIdealHoursLog;
 import com.github.sasachichito.agileplanning.port.adapter.resource.administration.request.ImportModel;
 import com.github.sasachichito.agileplanning.port.adapter.resource.burn.BurnResource;
+import com.github.sasachichito.agileplanning.port.adapter.resource.chart.ChartResource;
 import com.github.sasachichito.agileplanning.port.adapter.resource.plan.PlanResource;
 import com.github.sasachichito.agileplanning.port.adapter.resource.resource.ResourceResource;
 import com.github.sasachichito.agileplanning.port.adapter.resource.scope.ScopeResource;
@@ -45,6 +48,7 @@ public class AdministrationTool {
     private final ResourceResource resourceResource;
     private final PlanResource planResource;
     private final BurnResource burnResource;
+    private final ChartResource chartResource;
 
     private final StoryService storyService;
     private final ScopeService scopeService;
@@ -57,6 +61,8 @@ public class AdministrationTool {
     private final ResourceRepository resourceRepository;
     private final PlanRepository planRepository;
     private final BurnRepository burnRepository;
+    private final ScopeIdealHoursLogRepository scopeIdealHoursLogRepository;
+    private final ChartRepository chartRepository;
     private final BurndownChartService burndownChartService;
 
     @ApiOperation(value = "データエクスポート")
@@ -69,9 +75,10 @@ public class AdministrationTool {
                 .resources(this.resourceResource.resources())
                 .plans(this.planResource.plans())
                 .burns(this.burnResource.burns())
-                .scopeIdealHoursLogs(this.burndownChartService.getAll().stream()
+                .scopeIdealHoursLogs(this.scopeIdealHoursLogRepository.getAll().stream()
                         .map(JsonScopeIdealHoursLog::new)
                         .collect(Collectors.toList()))
+                .burndownLineCharts(this.chartResource.burnDownCharts())
                 .build();
     }
 
@@ -87,6 +94,8 @@ public class AdministrationTool {
         this.resourceRepository.flash();
         this.planRepository.flash();
         this.burnRepository.flash();
+        this.scopeIdealHoursLogRepository.flash();
+        this.chartRepository.flash();
 
         importModel.stories.forEach(storyRequest -> {
             StoryUpdateCmd storyUpdateCmd = StoryUpdateCmd.builder()
@@ -151,7 +160,6 @@ public class AdministrationTool {
             this.burnService.updateOrPut(burnUpdateCmd);
         });
 
-        this.burndownChartService.flash();
         importModel.scopeIdealHoursLogs.forEach(request -> {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm:ss");
             ScopeIdealHoursLog scopeIdealHoursLog = new ScopeIdealHoursLog(
@@ -160,7 +168,9 @@ public class AdministrationTool {
                     new ScopeIdealHours(request.scopeIdealHours),
                     ScopeIdealHoursLog.ChangeType.valueOf(request.changeType)
             );
-            this.burndownChartService.saveLog(scopeIdealHoursLog);
+            this.scopeIdealHoursLogRepository.saveLog(scopeIdealHoursLog);
         });
+
+
     }
 }

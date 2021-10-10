@@ -2,8 +2,8 @@ package com.github.sasachichito.agileplanning.domain.model.chart.event.subscribe
 
 import com.github.sasachichito.agileplanning.domain.model.chart.BurndownChartService;
 import com.github.sasachichito.agileplanning.domain.model.chart.ScopeIdealHoursLog;
+import com.github.sasachichito.agileplanning.domain.model.chart.ScopeIdealHoursLogRepository;
 import com.github.sasachichito.agileplanning.domain.model.event.DomainEvent;
-import com.github.sasachichito.agileplanning.domain.model.plan.Plan;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanRepository;
 import com.github.sasachichito.agileplanning.domain.model.plan.event.PlanCreated;
 import com.github.sasachichito.agileplanning.domain.model.resource.ResourceRepository;
@@ -29,22 +29,22 @@ public class ScopeIdealHoursLogger implements
     private ScopeIdealHoursLogger() {}
 
     private StoryRepository storyRepository;
-    private ResourceRepository resourceRepository;
     private PlanRepository planRepository;
     private ScopeRepository scopeRepository;
+    private ScopeIdealHoursLogRepository scopeIdealHoursLogRepository;
     private BurndownChartService burndownChartService;
 
     public void init(
             StoryRepository storyRepository,
-            ResourceRepository resourceRepository,
             PlanRepository planRepository,
             ScopeRepository scopeRepository,
+            ScopeIdealHoursLogRepository scopeIdealHoursLogRepository,
             BurndownChartService burndownChartService
     ) {
         this.storyRepository = storyRepository;
-        this.resourceRepository = resourceRepository;
         this.planRepository = planRepository;
         this.scopeRepository = scopeRepository;
+        this.scopeIdealHoursLogRepository = scopeIdealHoursLogRepository;
         this.burndownChartService = burndownChartService;
     }
 
@@ -62,9 +62,9 @@ public class ScopeIdealHoursLogger implements
                             scopeIdealHours,
                             ScopeIdealHoursLog.ChangeType.SCOPE_CHANGED);
 
-                    this.burndownChartService.saveLog(scopeIdealHoursLog);
+                    this.scopeIdealHoursLogRepository.saveLog(scopeIdealHoursLog);
 
-                    this.saveBurndownChart(plan, scopeIdealHours);
+                    this.burndownChartService.saveChart(plan, scopeIdealHours);
                 });
     }
 
@@ -82,9 +82,9 @@ public class ScopeIdealHoursLogger implements
                             scopeIdealHours,
                             ScopeIdealHoursLog.ChangeType.RESOURCE_CHANGED);
 
-                    this.burndownChartService.saveLog(scopeIdealHoursLog);
+                    this.scopeIdealHoursLogRepository.saveLog(scopeIdealHoursLog);
 
-                    this.saveBurndownChart(plan, scopeIdealHours);
+                    this.burndownChartService.saveChart(plan, scopeIdealHours);
                 });
     }
 
@@ -93,7 +93,7 @@ public class ScopeIdealHoursLogger implements
         ScopeIdealHours scopeIdealHours = scopeRepository.get(planCreated.plan().scopeId()).idealHours(
                 new ScopeIdealHoursCalculator(this.storyRepository));
 
-        this.burndownChartService.saveLog(
+        this.scopeIdealHoursLogRepository.saveLog(
                 new ScopeIdealHoursLog(
                         planCreated.plan().planId(),
                         LocalDateTime.now(),
@@ -101,16 +101,7 @@ public class ScopeIdealHoursLogger implements
                         ScopeIdealHoursLog.ChangeType.INITIAL
                 ));
 
-        this.saveBurndownChart(planCreated.plan(), scopeIdealHours);
-    }
-
-    private void saveBurndownChart(Plan plan, ScopeIdealHours scopeIdealHours) {
-        var burndownLineChart = burndownChartService.makeLineChart(
-                plan,
-                this.resourceRepository.get(plan.resourceId()),
-                scopeIdealHours);
-
-        burndownChartService.saveChart(burndownLineChart);
+        this.burndownChartService.saveChart(planCreated.plan(), scopeIdealHours);
     }
 
     @Override

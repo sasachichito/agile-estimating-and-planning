@@ -2,6 +2,7 @@ package com.github.sasachichito.agileplanning.port.adapter.resource.administrati
 
 import com.github.sasachichito.agileplanning.port.adapter.resource.administration.presentationmodel.external.JsonScopeIdealHoursLog;
 import com.github.sasachichito.agileplanning.port.adapter.resource.burn.presentationmodel.JsonBurn;
+import com.github.sasachichito.agileplanning.port.adapter.resource.chart.presentationmodel.JsonBurndownLineChart;
 import com.github.sasachichito.agileplanning.port.adapter.resource.plan.presentationmodel.JsonPlan;
 import com.github.sasachichito.agileplanning.port.adapter.resource.resource.presentationmodel.JsonResource;
 import com.github.sasachichito.agileplanning.port.adapter.resource.scope.presentationmodel.JsonScope;
@@ -34,4 +35,7 @@ public class ExportModel {
 
     @ApiModelProperty(position = 6)
     public List<JsonScopeIdealHoursLog> scopeIdealHoursLogs;
+
+    @ApiModelProperty(position = 7)
+    public List<JsonBurndownLineChart> burndownLineCharts;
 }

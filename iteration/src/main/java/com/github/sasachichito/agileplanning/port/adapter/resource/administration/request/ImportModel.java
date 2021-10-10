@@ -23,4 +23,5 @@ public class ImportModel {
 
     @ApiModelProperty(position = 6)
     public List<ScopeIdealHoursLogRequest> scopeIdealHoursLogs;
+
 }

@@ -3,6 +3,7 @@ package com.github.sasachichito.agileplanning.port.adapter.subscriber;
 import com.github.sasachichito.agileplanning.domain.model.burn.BurnRepository;
 import com.github.sasachichito.agileplanning.domain.model.burn.event.subscriber.BurnTaskRemover;
 import com.github.sasachichito.agileplanning.domain.model.chart.BurndownChartService;
+import com.github.sasachichito.agileplanning.domain.model.chart.ScopeIdealHoursLogRepository;
 import com.github.sasachichito.agileplanning.domain.model.chart.event.subscriber.ScopeIdealHoursLogger;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanRepository;
 import com.github.sasachichito.agileplanning.domain.model.plan.event.subscriber.PlanAdjuster;
@@ -25,6 +26,7 @@ public class Initializer {
     private final ScopeRepository scopeRepository;
     private final ResourceRepository resourceRepository;
     private final BurnRepository burnRepository;
+    private final ScopeIdealHoursLogRepository scopeIdealHoursLogRepository;
     private final BurndownChartService burndownChartService;
 
     @PostConstruct
@@ -45,9 +47,9 @@ public class Initializer {
 
         ScopeIdealHoursLogger.instance().init(
                 this.storyRepository,
-                this.resourceRepository,
                 this.planRepository,
                 this.scopeRepository,
+                this.scopeIdealHoursLogRepository,
                 this.burndownChartService);
     }
 }

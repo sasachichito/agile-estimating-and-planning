@@ -14,4 +14,8 @@ public class ChartService {
     public BurndownLineChartList burndownLineCharts(PlanId planId) {
         return this.burndownChartService.getLineCharts(planId);
     }
+
+    public BurndownLineChartList burndownLineCharts() {
+        return this.burndownChartService.getLineCharts();
+    }
 }

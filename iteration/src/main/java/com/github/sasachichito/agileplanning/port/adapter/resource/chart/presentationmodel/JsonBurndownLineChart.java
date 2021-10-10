@@ -16,7 +16,7 @@ public class JsonBurndownLineChart {
     private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/M/d");
 
     private List<String> period;
-    private List<BigDecimal> initialPlan;
+    private Integer version;
     private List<BigDecimal> changedPlan;
     private List<BigDecimal> actualResult;
     private String updatedDateTime;
@@ -27,9 +27,7 @@ public class JsonBurndownLineChart {
                 .map(date -> date.format(dtf))
                 .collect(Collectors.toList());
 
-//        this.initialPlan = burndownLineChart.initialPlan().stream()
-//                .map(b -> b.setScale(1, RoundingMode.HALF_UP))
-//                .collect(Collectors.toList());
+        this.version = burndownLineChart.version();
 
         this.changedPlan = burndownLineChart.changedPlan().stream()
                 .map(b -> b.setScale(1, RoundingMode.HALF_UP))

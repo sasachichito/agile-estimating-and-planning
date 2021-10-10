@@ -51,4 +51,10 @@ public class ChartResource {
     ) {
         return null;
     }
+
+    public List<JsonBurndownLineChart> burnDownCharts() {
+        return this.chartService.burndownLineCharts().burndownLineChartList().stream()
+                .map(JsonBurndownLineChart::new)
+                .collect(Collectors.toList());
+    }
 }

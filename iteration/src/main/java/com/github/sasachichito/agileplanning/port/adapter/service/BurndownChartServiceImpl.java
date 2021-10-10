@@ -8,6 +8,7 @@ import com.github.sasachichito.agileplanning.domain.model.plan.Plan;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanId;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanRepository;
 import com.github.sasachichito.agileplanning.domain.model.resource.Resource;
+import com.github.sasachichito.agileplanning.domain.model.resource.ResourceRepository;
 import com.github.sasachichito.agileplanning.domain.model.scope.ScopeIdealHours;
 import com.github.sasachichito.agileplanning.domain.model.scope.ScopeRepository;
 import com.github.sasachichito.agileplanning.domain.model.story.StoryRepository;
@@ -18,9 +19,6 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,67 +28,50 @@ public class BurndownChartServiceImpl implements BurndownChartService {
 
     private final BurnRepository burnRepository;
     private final PlanRepository planRepository;
+    private final ResourceRepository resourceRepository;
     private final ScopeRepository scopeRepository;
     private final StoryRepository storyRepository;
-
-    private HashMap<PlanId, List<ScopeIdealHoursLog>> scopeChangeLogMap = new HashMap<>();
-    private HashMap<PlanId, List<BurndownLineChart>> burndownLineChartMap = new HashMap<>();
-
-    @Override
-    public List<ScopeIdealHoursLog> get(PlanId planId) {
-        return this.scopeChangeLogMap.getOrDefault(planId, List.of());
-    }
+    private final ScopeIdealHoursLogRepository scopeIdealHoursLogRepository;
+    private final ChartRepository chartRepository;
 
     @Override
-    public List<ScopeIdealHoursLog> getAll() {
-        return this.scopeChangeLogMap.values().stream()
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-    }
+    public void saveChart(Plan plan, ScopeIdealHours scopeIdealHours) {
+        int nextChartVersion = 1;
 
-    @Override
-    public void saveLog(ScopeIdealHoursLog scopeIdealHoursLog) {
-        this.scopeChangeLogMap.computeIfAbsent(
-                scopeIdealHoursLog.planId(),
-                (planId) -> new ArrayList<>());
+        if (this.chartRepository.exist(plan.planId())) {
+            BurndownLineChart lastVersion = this.chartRepository.getLastVersion(plan.planId());
+            nextChartVersion = lastVersion.version() + 1;
+        }
 
-        this.scopeChangeLogMap.get(scopeIdealHoursLog.planId())
-                .add(scopeIdealHoursLog);
-    }
-
-    @Override
-    public void saveChart(BurndownLineChart burndownLineChart) {
-        this.burndownLineChartMap.computeIfAbsent(
-                burndownLineChart.planId(),
-                (planId) -> new ArrayList<>());
-        this.burndownLineChartMap
-                .get(burndownLineChart.planId())
-                .add(burndownLineChart);
-    }
-
-    @Override
-    public BurndownLineChart makeLineChart(Plan plan, Resource resource, ScopeIdealHours scopeIdealHours) {
         List<WorkDay> workDayList = WorkDayListGenerator.exec(plan.period().start(), plan.period().end());
         WorkDay previousWorkDay = WorkDayListGenerator.previousWorkDayOf(plan.period().start());
 
         ScopeIdealHoursLogList scopeIdealHoursLogList = new ScopeIdealHoursLogList(
-                this.get(plan.planId()));
+                this.scopeIdealHoursLogRepository.get(plan.planId()));
 
         List<LocalDate> period = getPeriod(workDayList, previousWorkDay);
 
-        List<BigDecimal> changedPlan = getChangedPlan(plan, resource, workDayList, previousWorkDay, scopeIdealHoursLogList);
+        List<BigDecimal> changedPlan = getChangedPlan(
+                plan,
+                this.resourceRepository.get(plan.resourceId()),
+                workDayList,
+                previousWorkDay,
+                scopeIdealHoursLogList);
 
-        return new BurndownLineChart(
+        var burndownLineChart = new BurndownLineChart(
                 plan.planId(),
+                nextChartVersion,
                 LocalDateTime.now(),
                 scopeIdealHours,
                 period,
                 changedPlan);
+
+        this.chartRepository.add(burndownLineChart);
     }
 
     @Override
     public BurndownLineChartList getLineCharts(PlanId planId) {
-        if (!this.burndownLineChartMap.containsKey(planId)) {
+        if (!this.chartRepository.exist(planId)) {
             throw new ResourceNotFoundException("planId " + planId.id() + " is not found");
         }
 
@@ -104,10 +85,14 @@ public class BurndownChartServiceImpl implements BurndownChartService {
 
         BurnList burnList = new BurnList(aBurnList);
 
-        BurndownLineChartList burndownLineChartList = new BurndownLineChartList(this.burndownLineChartMap.get(planId));
+        BurndownLineChartList burndownLineChartList = new BurndownLineChartList(this.chartRepository.getList(planId));
         burndownLineChartList.setActualResult(plan, burnList, new BurnHoursCalculator(this.scopeRepository, this.storyRepository));
 
         return burndownLineChartList;
+    }
+
+    public BurndownLineChartList getLineCharts() {
+        return new BurndownLineChartList(this.chartRepository.getAll());
     }
 
     private List<LocalDate> getPeriod(List<WorkDay> workDayList, WorkDay previousWorkDay) {
@@ -126,10 +111,5 @@ public class BurndownChartServiceImpl implements BurndownChartService {
                 .collect(Collectors.toList());
         changedPlan.add(0, scopeIdealHoursLogList.hoursAt(previousWorkDay.localDate()));
         return changedPlan;
-    }
-
-    @Override
-    public void flash() {
-        this.scopeChangeLogMap = new HashMap<>();
     }
 }

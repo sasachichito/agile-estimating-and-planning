@@ -14,53 +14,48 @@ import java.util.List;
 @Getter
 public class BurndownLineChart {
     private PlanId planId;
+    private Integer version;
     private LocalDateTime updatedDateTime;
     private ScopeIdealHours scopeIdealHours;
     private List<LocalDate> period;
-    private List<BigDecimal> initialPlan;
     private List<BigDecimal> changedPlan;
     private List<BigDecimal> actualResult;
     private String comment;
-
-    public BurndownLineChart(List<LocalDate> period, List<BigDecimal> initialPlan, List<BigDecimal> changedPlan, List<BigDecimal> actualResult) {
-        this.period = period;
-        this.initialPlan = initialPlan;
-        this.changedPlan = changedPlan;
-        this.actualResult = actualResult;
-    }
-
-    public BurndownLineChart(
-            PlanId planId,
-            LocalDateTime updatedDateTime,
-            List<LocalDate> period,
-            List<BigDecimal> initialPlan,
-            List<BigDecimal> changedPlan,
-            List<BigDecimal> actualResult
-    ) {
-        this.planId = planId;
-        this.updatedDateTime = updatedDateTime;
-        this.period = period;
-        this.initialPlan = initialPlan;
-        this.changedPlan = changedPlan;
-        this.actualResult = actualResult;
-        this.comment = "test comment";
-    }
 
     public BurndownLineChart(
             PlanId planId,
             LocalDateTime updatedDateTime,
             ScopeIdealHours scopeIdealHours,
             List<LocalDate> period,
-//            List<BigDecimal> initialPlan,
             List<BigDecimal> changedPlan
     ) {
         this.planId = planId;
         this.updatedDateTime = updatedDateTime;
         this.period = period;
-//        this.initialPlan = initialPlan;
         this.changedPlan = changedPlan;
         this.scopeIdealHours = scopeIdealHours;
         this.comment = "test comment";
+    }
+
+    public BurndownLineChart(
+            PlanId planId,
+            Integer version,
+            LocalDateTime updatedDateTime,
+            ScopeIdealHours scopeIdealHours,
+            List<LocalDate> period,
+            List<BigDecimal> changedPlan
+    ) {
+        this.planId = planId;
+        this.version = version;
+        this.updatedDateTime = updatedDateTime;
+        this.period = period;
+        this.changedPlan = changedPlan;
+        this.scopeIdealHours = scopeIdealHours;
+        this.comment = "test comment";
+    }
+
+    public boolean isVersion(int version) {
+        return this.version == version;
     }
 
     public void setActualResult(List<BigDecimal> actualResult) { this.actualResult = actualResult; }
