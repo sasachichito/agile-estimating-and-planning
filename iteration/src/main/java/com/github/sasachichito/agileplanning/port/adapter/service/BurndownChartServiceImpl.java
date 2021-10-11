@@ -39,8 +39,7 @@ public class BurndownChartServiceImpl implements BurndownChartService {
         int nextChartVersion = 1;
 
         if (this.chartRepository.exist(plan.planId())) {
-            BurndownLineChart lastVersion = this.chartRepository.getLastVersion(plan.planId());
-            nextChartVersion = lastVersion.version() + 1;
+            nextChartVersion = this.chartRepository.getLastVersion(plan.planId()).version() + 1;
         }
 
         List<WorkDay> workDayList = WorkDayListGenerator.exec(plan.period().start(), plan.period().end());
@@ -66,6 +65,11 @@ public class BurndownChartServiceImpl implements BurndownChartService {
                 period,
                 changedPlan);
 
+        if (this.chartRepository.exist(plan.planId())
+                && burndownLineChart.isSameChart(this.chartRepository.getLastVersion(plan.planId()))
+        ) {
+            return;
+        }
         this.chartRepository.add(burndownLineChart);
     }
 

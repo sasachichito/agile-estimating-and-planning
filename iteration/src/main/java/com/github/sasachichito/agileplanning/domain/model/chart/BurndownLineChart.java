@@ -56,8 +56,11 @@ public class BurndownLineChart {
         this.comment = comment;
     }
 
-    public boolean isVersion(int version) {
-        return this.version == version;
+    public boolean isSameChart(BurndownLineChart aChart) {
+        return this.planId.equals(aChart.planId)
+                && this.scopeIdealHours.equals(aChart.scopeIdealHours)
+                && this.period.equals(aChart.period)
+                && this.changedPlan.equals(aChart.changedPlan);
     }
 
     public void setActualResult(List<BigDecimal> actualResult) { this.actualResult = actualResult; }
