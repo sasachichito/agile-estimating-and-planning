@@ -1,6 +1,7 @@
 package com.github.sasachichito.agileplanning.port.adapter.resource.chart;
 
 import com.github.sasachichito.agileplanning.application.service.ChartService;
+import com.github.sasachichito.agileplanning.domain.model.chart.BurndownLineChart;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanId;
 import com.github.sasachichito.agileplanning.port.adapter.resource.chart.presentationmodel.JsonBurndownLineChart;
 import com.github.sasachichito.agileplanning.port.adapter.resource.chart.request.CommentRequest;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,33 +30,27 @@ public class ChartResource {
     public List<JsonBurndownLineChart> burnDownCharts(@PathVariable int planId) {
         return this.chartService.burndownLineCharts(new PlanId(planId)).burndownLineChartList().stream()
                 .map(JsonBurndownLineChart::new)
+                .sorted(Comparator.comparing(JsonBurndownLineChart::getVersion).reversed())
                 .collect(Collectors.toList());
     }
 
     @ApiOperation(value = "コメント登録")
-    @PostMapping
+    @PostMapping("burndown/lines")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentRequest addCommnet(
+    public void addCommnet(
             @ApiParam(value = "コメント登録データ")
             @RequestBody CommentRequest commentRequest
     ) {
-        return null;
-    }
-
-    @ApiOperation(value = "コメント更新")
-    @PutMapping("{id}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public CommentRequest putCommnet(
-            @PathVariable int id,
-            @ApiParam(value = "コメント更新データ")
-            @RequestBody CommentRequest commentRequest
-    ) {
-        return null;
+        this.chartService.addCommnet(
+                new PlanId(commentRequest.planId),
+                commentRequest.version,
+                commentRequest.comment);
     }
 
     public List<JsonBurndownLineChart> burnDownCharts() {
         return this.chartService.burndownLineCharts().stream()
                 .map(JsonBurndownLineChart::new)
+                .sorted(Comparator.comparing(JsonBurndownLineChart::getVersion).reversed())
                 .collect(Collectors.toList());
     }
 }

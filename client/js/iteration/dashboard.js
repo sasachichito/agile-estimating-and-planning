@@ -121,7 +121,7 @@ export default class extends iteration {
               options: {
                 title: {
                   display: true,
-                  text: [oneChart.updatedDateTime, oneChart.comment]
+                  text: ['Ver.' + oneChart.version + '  Updated at ' + oneChart.updatedDateTime, oneChart.comment]
                 },
                 scales: {
                   yAxes: [{

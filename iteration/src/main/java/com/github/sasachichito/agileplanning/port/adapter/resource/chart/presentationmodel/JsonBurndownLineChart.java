@@ -45,6 +45,7 @@ public class JsonBurndownLineChart {
 
         this.updatedDateTime = burndownLineChart.updatedDateTime()
                 .format(DateTimeFormatter.ofPattern("yyyy/M/d HH:mm:ss"));
-        this.comment = burndownLineChart.comment();
+
+        this.comment = burndownLineChart.comment() == null ? "" : burndownLineChart.comment();
     }
 }

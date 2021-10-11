@@ -24,21 +24,6 @@ public class BurndownLineChart {
 
     public BurndownLineChart(
             PlanId planId,
-            LocalDateTime updatedDateTime,
-            ScopeIdealHours scopeIdealHours,
-            List<LocalDate> period,
-            List<BigDecimal> changedPlan
-    ) {
-        this.planId = planId;
-        this.updatedDateTime = updatedDateTime;
-        this.period = period;
-        this.changedPlan = changedPlan;
-        this.scopeIdealHours = scopeIdealHours;
-        this.comment = "test comment";
-    }
-
-    public BurndownLineChart(
-            PlanId planId,
             Integer version,
             LocalDateTime updatedDateTime,
             ScopeIdealHours scopeIdealHours,
@@ -51,7 +36,6 @@ public class BurndownLineChart {
         this.period = period;
         this.changedPlan = changedPlan;
         this.scopeIdealHours = scopeIdealHours;
-        this.comment = "test comment";
     }
 
     public BurndownLineChart(
