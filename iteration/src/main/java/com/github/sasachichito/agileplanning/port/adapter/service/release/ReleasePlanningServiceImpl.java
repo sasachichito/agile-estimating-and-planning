@@ -1,23 +1,38 @@
-package com.github.sasachichito.agileplanning.port.adapter.service.iteration;
+package com.github.sasachichito.agileplanning.port.adapter.service.release;
 
-import com.github.sasachichito.agileplanning.domain.model.iteration.IterationPlanningService;
+import com.github.sasachichito.agileplanning.domain.model.release.ReleasePlanningService;
 import com.github.sasachichito.agileplanning.domain.model.story.Story;
-import com.github.sasachichito.agileplanning.port.adapter.service.iteration.request.PutStoryRequest;
+import com.github.sasachichito.agileplanning.domain.model.story.StoryId;
+import com.github.sasachichito.agileplanning.port.adapter.service.release.request.PutStoryRequest;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@Component
-public class IterationPlanningServiceImpl implements IterationPlanningService {
+import java.math.BigDecimal;
 
-    @Value("${agile-iteration-planning.url}")
+
+@Component
+public class ReleasePlanningServiceImpl implements ReleasePlanningService {
+
+    @Value("${agile-release-planning.url}")
     private String baseUrl;
 
-    private WebClient webClient = WebClient.builder()
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .build();
+    private WebClient webClient = WebClient.create();
+
+    @Override
+    public BigDecimal storyPoint(StoryId storyId) {
+        BigDecimal storyPoint = this.webClient.get()
+                .uri(this.baseUrl + "/stories/" + storyId.id() + "/story-point")
+                .retrieve()
+                .bodyToMono(BigDecimal.class)
+                .block();
+
+        if (storyPoint == null) {
+            throw new IllegalArgumentException("StoryId: " + storyId.id() + " StoryPointの取得失敗.");
+        }
+
+        return storyPoint;
+    }
 
     @Override
     public void createStory(Story story) {
@@ -47,15 +62,6 @@ public class IterationPlanningServiceImpl implements IterationPlanningService {
     public void deleteStory(Story story) {
         this.webClient.delete()
                 .uri(this.baseUrl + "/stories/" + story.storyId().id())
-                .retrieve()
-                .bodyToMono(Void.class)
-                .block();
-    }
-
-    @Override
-    public void dataClear() {
-        this.webClient.post()
-                .uri(this.baseUrl + "/admin/clear")
                 .retrieve()
                 .bodyToMono(Void.class)
                 .block();

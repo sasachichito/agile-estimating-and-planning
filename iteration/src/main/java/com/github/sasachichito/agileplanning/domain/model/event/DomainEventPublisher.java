@@ -4,6 +4,7 @@ import com.github.sasachichito.agileplanning.domain.model.burn.event.subscriber.
 import com.github.sasachichito.agileplanning.domain.model.chart.event.subscriber.ScopeIdealHoursLogger;
 import com.github.sasachichito.agileplanning.domain.model.plan.event.subscriber.PlanAdjuster;
 import com.github.sasachichito.agileplanning.domain.model.plan.event.subscriber.PlanRemover;
+import com.github.sasachichito.agileplanning.domain.model.release.StoryLinker;
 import com.github.sasachichito.agileplanning.domain.model.scope.event.subscriber.ScopeChanger;
 import com.github.sasachichito.agileplanning.domain.model.scope.event.subscriber.ScopeStoryRemover;
 
@@ -21,6 +22,7 @@ public class DomainEventPublisher {
     private List<DomainEventSubscriber> subscriberList = new ArrayList<>();
 
     private DomainEventPublisher() {
+        this.addSubscriber(StoryLinker.instance());
         this.addSubscriber(PlanAdjuster.instance());
         this.addSubscriber(PlanRemover.instance());
         this.addSubscriber(ScopeStoryRemover.instance());

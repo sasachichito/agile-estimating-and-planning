@@ -19,7 +19,7 @@ public class BurndownLineChart {
     private ScopeIdealHours scopeIdealHours;
     private List<LocalDate> period;
     private List<BigDecimal> changedPlan;
-    private List<BigDecimal> actualResult;
+    private List<BigDecimal> actualResult = List.of();
     private String comment;
 
     public BurndownLineChart(

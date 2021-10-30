@@ -8,6 +8,7 @@ import com.github.sasachichito.agileplanning.application.command.story.StoryUpda
 import com.github.sasachichito.agileplanning.application.service.*;
 import com.github.sasachichito.agileplanning.domain.model.burn.BurnRepository;
 import com.github.sasachichito.agileplanning.domain.model.chart.*;
+import com.github.sasachichito.agileplanning.domain.model.iteration.IterationPlanningService;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanId;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanRepository;
 import com.github.sasachichito.agileplanning.domain.model.resource.ResourceRepository;
@@ -61,6 +62,8 @@ public class AdministrationTool {
     private final BurnRepository burnRepository;
     private final ScopePointLogRepository scopePointLogRepository;
     private final ChartRepository chartRepository;
+
+    private final IterationPlanningService iterationPlanningService;
 
     @ApiOperation(value = "データエクスポート")
     @GetMapping("/export")
@@ -192,5 +195,6 @@ public class AdministrationTool {
         this.burnRepository.flash();
         this.scopePointLogRepository.flash();
         this.chartRepository.flash();
+        this.iterationPlanningService.dataClear();
     }
 }

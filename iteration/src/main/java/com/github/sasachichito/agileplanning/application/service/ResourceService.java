@@ -6,7 +6,7 @@ import com.github.sasachichito.agileplanning.application.dpo.VelocityEstimateInf
 import com.github.sasachichito.agileplanning.domain.model.resource.*;
 import com.github.sasachichito.agileplanning.domain.model.resource.entry.*;
 import com.github.sasachichito.agileplanning.domain.model.resource.entry.member.*;
-import com.github.sasachichito.agileplanning.domain.model.resource.entry.member.velocity.ReleasePlanningService;
+import com.github.sasachichito.agileplanning.domain.model.release.ReleasePlanningService;
 import com.github.sasachichito.agileplanning.domain.model.story.Story;
 import com.github.sasachichito.agileplanning.domain.model.story.StoryId;
 import com.github.sasachichito.agileplanning.domain.model.story.StoryRepository;

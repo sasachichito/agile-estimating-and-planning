@@ -1,4 +1,4 @@
-package com.github.sasachichito.agileplanning.port.adapter.service;
+package com.github.sasachichito.agileplanning.port.adapter.service.chart;
 
 import com.github.sasachichito.agileplanning.domain.model.burn.*;
 import com.github.sasachichito.agileplanning.domain.model.chart.*;

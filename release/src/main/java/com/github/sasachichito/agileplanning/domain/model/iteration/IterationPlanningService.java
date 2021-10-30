@@ -6,4 +6,5 @@ public interface IterationPlanningService {
     void createStory(Story story);
     void updateStory(Story story);
     void deleteStory(Story story);
+    void dataClear();
 }

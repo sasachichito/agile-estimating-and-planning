@@ -4,6 +4,7 @@ import com.github.sasachichito.agileplanning.domain.model.event.DomainEventPubli
 import com.github.sasachichito.agileplanning.domain.model.plan.milestone.StoryIncrement;
 import com.github.sasachichito.agileplanning.domain.model.scope.ControlRateForStory;
 import com.github.sasachichito.agileplanning.domain.model.story.event.StoryChanged;
+import com.github.sasachichito.agileplanning.domain.model.story.event.StoryCreated;
 import com.github.sasachichito.agileplanning.domain.model.story.event.StoryRemoved;
 import com.github.sasachichito.agileplanning.domain.model.story.task.TaskId;
 import com.github.sasachichito.agileplanning.domain.model.story.task.TaskIdealHours;
@@ -33,6 +34,8 @@ public class Story {
         this.setStoryId(storyId);
         this.setStoryTitle(storyTitle);
         this.setTaskList(taskList);
+
+        DomainEventPublisher.instance().publish(new StoryCreated(this));
     }
 
     public BigDecimal estimate50Pct() {

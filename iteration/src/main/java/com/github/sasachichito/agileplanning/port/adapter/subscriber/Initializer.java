@@ -8,6 +8,8 @@ import com.github.sasachichito.agileplanning.domain.model.chart.event.subscriber
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanRepository;
 import com.github.sasachichito.agileplanning.domain.model.plan.event.subscriber.PlanAdjuster;
 import com.github.sasachichito.agileplanning.domain.model.plan.event.subscriber.PlanRemover;
+import com.github.sasachichito.agileplanning.domain.model.release.ReleasePlanningService;
+import com.github.sasachichito.agileplanning.domain.model.release.StoryLinker;
 import com.github.sasachichito.agileplanning.domain.model.resource.ResourceRepository;
 import com.github.sasachichito.agileplanning.domain.model.scope.ScopeRepository;
 import com.github.sasachichito.agileplanning.domain.model.scope.event.subscriber.ScopeChanger;
@@ -21,6 +23,7 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 @Component
 public class Initializer {
+    private final ReleasePlanningService releasePlanningService;
     private final PlanRepository planRepository;
     private final StoryRepository storyRepository;
     private final ScopeRepository scopeRepository;
@@ -31,6 +34,8 @@ public class Initializer {
 
     @PostConstruct
     public void init() {
+        StoryLinker.instance().setIterationPlanningService(releasePlanningService);
+
         PlanAdjuster.instance().setRepositories(
                 this.planRepository,
                 this.scopeRepository,
