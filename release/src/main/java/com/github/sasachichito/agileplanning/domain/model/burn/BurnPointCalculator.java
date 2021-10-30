@@ -1,5 +1,6 @@
 package com.github.sasachichito.agileplanning.domain.model.burn;
 
+import com.github.sasachichito.agileplanning.domain.model.plan.Plan;
 import com.github.sasachichito.agileplanning.domain.model.scope.*;
 import com.github.sasachichito.agileplanning.domain.model.story.Story;
 import com.github.sasachichito.agileplanning.domain.model.story.StoryRepository;
@@ -16,11 +17,12 @@ public class BurnPointCalculator {
         this.storyRepository = storyRepository;
     }
 
-    public BigDecimal calculate(Burn burn) {
+    public BigDecimal calculate(Plan plan, Burn burn) {
         Story story = this.storyRepository.get(burn.storyId());
 
         Scope scope = this.scopeRepository.getAll().stream()
                 .filter(aScope -> aScope.hasStory(story.storyId()))
+                .filter(aScope -> plan.hasScope(aScope.scopeId()))
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("StoryId: " + burn.storyId() + " を含むスコープが存在しません。"));
 
         ControlRate controlRate = scope.controlRate(

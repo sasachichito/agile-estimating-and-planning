@@ -1,6 +1,7 @@
 package com.github.sasachichito.agileplanning.port.adapter.resource.administration.request;
 
 import com.github.sasachichito.agileplanning.port.adapter.resource.administration.request.external.ScopeIdealHoursLogRequest;
+import com.github.sasachichito.agileplanning.port.adapter.resource.chart.request.ChartRequest;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
@@ -23,4 +24,7 @@ public class ImportModel {
 
     @ApiModelProperty(position = 6)
     public List<ScopeIdealHoursLogRequest> scopeIdealHoursLogs;
+
+    @ApiModelProperty(position = 7)
+    public List<ChartRequest> burndownLineCharts;
 }

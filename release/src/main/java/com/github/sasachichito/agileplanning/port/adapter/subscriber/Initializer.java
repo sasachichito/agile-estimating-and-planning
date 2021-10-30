@@ -3,6 +3,7 @@ package com.github.sasachichito.agileplanning.port.adapter.subscriber;
 import com.github.sasachichito.agileplanning.domain.model.burn.BurnRepository;
 import com.github.sasachichito.agileplanning.domain.model.burn.event.subscriber.BurnRemover;
 import com.github.sasachichito.agileplanning.domain.model.chart.BurndownChartService;
+import com.github.sasachichito.agileplanning.domain.model.chart.ScopePointLogRepository;
 import com.github.sasachichito.agileplanning.domain.model.chart.event.subscriber.ScopePointLogger;
 import com.github.sasachichito.agileplanning.domain.model.iteration.IterationPlanningService;
 import com.github.sasachichito.agileplanning.domain.model.iteration.StoryLinker;
@@ -27,6 +28,7 @@ public class Initializer {
     private final ScopeRepository scopeRepository;
     private final ResourceRepository resourceRepository;
     private final BurnRepository burnRepository;
+    private final ScopePointLogRepository scopePointLogRepository;
     private final IterationPlanningService iterationPlanningService;
     private final BurndownChartService burndownChartService;
 
@@ -52,6 +54,7 @@ public class Initializer {
                 this.storyRepository,
                 this.planRepository,
                 this.scopeRepository,
+                this.scopePointLogRepository,
                 this.burndownChartService);
     }
 }

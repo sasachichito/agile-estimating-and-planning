@@ -51,4 +51,13 @@ public class IterationPlanningServiceImpl implements IterationPlanningService {
                 .bodyToMono(Void.class)
                 .block();
     }
+
+    @Override
+    public void dataClear() {
+        this.webClient.post()
+                .uri(this.baseUrl + "/admin/clear")
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+    }
 }

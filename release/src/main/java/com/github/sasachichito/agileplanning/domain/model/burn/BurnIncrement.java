@@ -12,6 +12,6 @@ public class BurnIncrement {
     }
 
     public BigDecimal pointAt(LocalDate localDate) {
-        return this.incrementedStoryPoint.get(localDate);
+        return this.incrementedStoryPoint.getOrDefault(localDate, BigDecimal.ZERO);
     }
 }

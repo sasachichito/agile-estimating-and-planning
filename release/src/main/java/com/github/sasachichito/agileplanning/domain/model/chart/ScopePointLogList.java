@@ -2,7 +2,6 @@ package com.github.sasachichito.agileplanning.domain.model.chart;
 
 import com.github.sasachichito.agileplanning.domain.model.burn.BurnIncrement;
 import com.github.sasachichito.agileplanning.domain.model.resource.VelocityIncrement;
-import com.github.sasachichito.agileplanning.domain.model.scope.ScopePoint;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,19 +38,14 @@ public class ScopePointLogList {
     }
 
     public BigDecimal pointAt(LocalDate localDate) {
-        ScopePointLog lastLog = this.scopePointLogList.stream()
-                .filter(scopePointLog -> scopePointLog.dateTime().toLocalDate()
-                        .isBefore(localDate))
-                .max(Comparator.comparing(ScopePointLog::dateTime))
-                .orElse(this.initialLog());
-
+        // 指定日と同日か古いのログのうち、最新のログの理想時間
         return this.scopePointLogList.stream()
-                .filter(scopePointLog -> scopePointLog.dateTime().toLocalDate()
-                        .equals(localDate))
+                .filter(scopePointLog -> scopePointLog.dateTime().toLocalDate().equals(localDate)
+                        || scopePointLog.dateTime().toLocalDate().isBefore(localDate))
                 .max(Comparator.comparing(ScopePointLog::dateTime))
-                .map(ScopePointLog::scopePoint)
-                .map(ScopePoint::point)
-                .orElse(lastLog.scopePoint().point());
+                .map(log -> log.scopePoint().point())
+                // 存在しない場合はイニシャルログの理想時間
+                .orElse(this.initialLog().scopePoint().point());
     }
 
     private ScopePointLog initialLog() {

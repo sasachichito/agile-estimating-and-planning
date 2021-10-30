@@ -3,6 +3,7 @@ package com.github.sasachichito.agileplanning.domain.model.burn;
 import com.github.sasachichito.agileplanning.domain.model.period.Period;
 import com.github.sasachichito.agileplanning.domain.model.period.WorkDay;
 import com.github.sasachichito.agileplanning.domain.model.period.WorkDayListGenerator;
+import com.github.sasachichito.agileplanning.domain.model.plan.Plan;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ public class BurnList {
         this.burnList = burnList;
     }
 
-    public BurnIncrement burnIncrement(Period period, BurnPointCalculator burnPointCalculator) {
+    public BurnIncrement burnIncrement(Plan plan, Period period, BurnPointCalculator burnPointCalculator) {
         List<WorkDay> workDayList = WorkDayListGenerator.exec(period.start(), period.end());
 
         Map<LocalDate, BigDecimal> burnIncrementMap = new LinkedHashMap<>();
@@ -25,7 +26,7 @@ public class BurnList {
         workDayList.forEach(workDay -> {
             BigDecimal totalBurnPointAtDay = this.burnList.stream()
                     .filter(burn -> burn.isAlreadyBurnedAt(workDay.localDate()))
-                    .map(burn -> burn.burnPoint(burnPointCalculator))
+                    .map(burn -> burn.burnPoint(plan, burnPointCalculator))
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
             burnIncrementMap.put(workDay.localDate(), totalBurnPointAtDay);

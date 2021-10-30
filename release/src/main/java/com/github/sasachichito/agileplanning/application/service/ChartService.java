@@ -3,6 +3,8 @@ package com.github.sasachichito.agileplanning.application.service;
 import com.github.sasachichito.agileplanning.domain.model.burn.*;
 import com.github.sasachichito.agileplanning.domain.model.chart.BurndownChartService;
 import com.github.sasachichito.agileplanning.domain.model.chart.BurndownLineChart;
+import com.github.sasachichito.agileplanning.domain.model.chart.BurndownLineChartList;
+import com.github.sasachichito.agileplanning.domain.model.chart.ChartRepository;
 import com.github.sasachichito.agileplanning.domain.model.plan.Plan;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanId;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanRepository;
@@ -14,34 +16,27 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class ChartService {
     private final BurndownChartService burndownChartService;
-    private final ScopeRepository scopeRepository;
-    private final StoryRepository storyRepository;
-    private final BurnRepository burnRepository;
-    private final PlanRepository planRepository;
-    private final ResourceRepository resourceRepository;
+    private final ChartRepository chartRepository;
 
-    public BurndownLineChart burndownLineChart(PlanId planId) {
-        Plan plan = this.planRepository.get(planId);
-        Resource resource = this.resourceRepository.get(plan.resourceId());
+    public BurndownLineChartList burndownLineCharts(PlanId planId) {
+        return this.burndownChartService.getLineCharts(planId);
+    }
 
-        List<Burn> aBurnList = this.burnRepository.getAll().stream()
-                .filter(burn -> burn.isRelated(
-                        plan.scopeId(),
-                        new BurnRelationChecker(this.scopeRepository, this.storyRepository)))
-                .collect(Collectors.toList());
+    public BurndownLineChart addCommnet(PlanId planId, int version, String comment) {
+        BurndownLineChart burndownLineChart = this.chartRepository.get(Map.of(planId, version));
+        burndownLineChart.setComment(comment);
+        this.chartRepository.add(burndownLineChart);
+        return burndownLineChart;
+    }
 
-        BurnList burnList = new BurnList(aBurnList);
-
-        return this.burndownChartService.getLineChart(
-                plan,
-                resource,
-                burnList.burnIncrement(plan.period(), new BurnPointCalculator(this.scopeRepository, this.storyRepository))
-        );
+    public List<BurndownLineChart> burndownLineCharts() {
+        return this.burndownChartService.getLineCharts();
     }
 }

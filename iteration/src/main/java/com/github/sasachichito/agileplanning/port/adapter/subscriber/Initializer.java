@@ -3,10 +3,13 @@ package com.github.sasachichito.agileplanning.port.adapter.subscriber;
 import com.github.sasachichito.agileplanning.domain.model.burn.BurnRepository;
 import com.github.sasachichito.agileplanning.domain.model.burn.event.subscriber.BurnTaskRemover;
 import com.github.sasachichito.agileplanning.domain.model.chart.BurndownChartService;
+import com.github.sasachichito.agileplanning.domain.model.chart.ScopeIdealHoursLogRepository;
 import com.github.sasachichito.agileplanning.domain.model.chart.event.subscriber.ScopeIdealHoursLogger;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanRepository;
 import com.github.sasachichito.agileplanning.domain.model.plan.event.subscriber.PlanAdjuster;
 import com.github.sasachichito.agileplanning.domain.model.plan.event.subscriber.PlanRemover;
+import com.github.sasachichito.agileplanning.domain.model.release.ReleasePlanningService;
+import com.github.sasachichito.agileplanning.domain.model.release.StoryLinker;
 import com.github.sasachichito.agileplanning.domain.model.resource.ResourceRepository;
 import com.github.sasachichito.agileplanning.domain.model.scope.ScopeRepository;
 import com.github.sasachichito.agileplanning.domain.model.scope.event.subscriber.ScopeChanger;
@@ -20,15 +23,19 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 @Component
 public class Initializer {
+    private final ReleasePlanningService releasePlanningService;
     private final PlanRepository planRepository;
     private final StoryRepository storyRepository;
     private final ScopeRepository scopeRepository;
     private final ResourceRepository resourceRepository;
     private final BurnRepository burnRepository;
+    private final ScopeIdealHoursLogRepository scopeIdealHoursLogRepository;
     private final BurndownChartService burndownChartService;
 
     @PostConstruct
     public void init() {
+        StoryLinker.instance().setIterationPlanningService(releasePlanningService);
+
         PlanAdjuster.instance().setRepositories(
                 this.planRepository,
                 this.scopeRepository,
@@ -47,6 +54,7 @@ public class Initializer {
                 this.storyRepository,
                 this.planRepository,
                 this.scopeRepository,
+                this.scopeIdealHoursLogRepository,
                 this.burndownChartService);
     }
 }

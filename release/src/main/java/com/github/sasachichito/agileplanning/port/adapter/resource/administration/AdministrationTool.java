@@ -7,8 +7,8 @@ import com.github.sasachichito.agileplanning.application.command.scope.ScopeUpda
 import com.github.sasachichito.agileplanning.application.command.story.StoryUpdateCmd;
 import com.github.sasachichito.agileplanning.application.service.*;
 import com.github.sasachichito.agileplanning.domain.model.burn.BurnRepository;
-import com.github.sasachichito.agileplanning.domain.model.chart.BurndownChartService;
-import com.github.sasachichito.agileplanning.domain.model.chart.ScopePointLog;
+import com.github.sasachichito.agileplanning.domain.model.chart.*;
+import com.github.sasachichito.agileplanning.domain.model.iteration.IterationPlanningService;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanId;
 import com.github.sasachichito.agileplanning.domain.model.plan.PlanRepository;
 import com.github.sasachichito.agileplanning.domain.model.resource.ResourceRepository;
@@ -19,6 +19,7 @@ import com.github.sasachichito.agileplanning.port.adapter.resource.administratio
 import com.github.sasachichito.agileplanning.port.adapter.resource.administration.presentationmodel.external.JsonScopePointLog;
 import com.github.sasachichito.agileplanning.port.adapter.resource.administration.request.ImportModel;
 import com.github.sasachichito.agileplanning.port.adapter.resource.burn.BurnResource;
+import com.github.sasachichito.agileplanning.port.adapter.resource.chart.ChartResource;
 import com.github.sasachichito.agileplanning.port.adapter.resource.plan.PlanResource;
 import com.github.sasachichito.agileplanning.port.adapter.resource.resource.ResourceResource;
 import com.github.sasachichito.agileplanning.port.adapter.resource.scope.ScopeResource;
@@ -30,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
@@ -45,6 +47,7 @@ public class AdministrationTool {
     private final ResourceResource resourceResource;
     private final PlanResource planResource;
     private final BurnResource burnResource;
+    private final ChartResource chartResource;
 
     private final StoryService storyService;
     private final ScopeService scopeService;
@@ -57,7 +60,10 @@ public class AdministrationTool {
     private final ResourceRepository resourceRepository;
     private final PlanRepository planRepository;
     private final BurnRepository burnRepository;
-    private final BurndownChartService burndownChartService;
+    private final ScopePointLogRepository scopePointLogRepository;
+    private final ChartRepository chartRepository;
+
+    private final IterationPlanningService iterationPlanningService;
 
     @ApiOperation(value = "データエクスポート")
     @GetMapping("/export")
@@ -69,9 +75,10 @@ public class AdministrationTool {
                 .resources(this.resourceResource.resources())
                 .plans(this.planResource.plans())
                 .burns(this.burnResource.burns())
-                .scopePointLogs(this.burndownChartService.getAll().stream()
+                .scopePointLogs(this.scopePointLogRepository.getAll().stream()
                     .map(JsonScopePointLog::new)
                     .collect(Collectors.toList()))
+                .burndownLineCharts(this.chartResource.burnDownCharts())
                 .build();
     }
 
@@ -87,6 +94,8 @@ public class AdministrationTool {
         this.resourceRepository.flash();
         this.planRepository.flash();
         this.burnRepository.flash();
+        this.scopePointLogRepository.flash();
+        this.chartRepository.flash();
 
         importModel.stories.forEach(storyRequest -> {
             StoryUpdateCmd storyUpdateCmd = StoryUpdateCmd.builder()
@@ -148,7 +157,6 @@ public class AdministrationTool {
             this.burnService.updateOrPut(burnUpdateCmd);
         });
 
-        this.burndownChartService.flash();
         importModel.scopePointLogs.forEach(request -> {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm:ss");
             ScopePointLog scopePointLog = new ScopePointLog(
@@ -157,7 +165,36 @@ public class AdministrationTool {
                     new ScopePoint(request.scopePoint),
                     ScopePointLog.ChangeType.valueOf(request.changeType)
             );
-            this.burndownChartService.save(scopePointLog);
+            this.scopePointLogRepository.saveLog(scopePointLog);
         });
+
+        importModel.burndownLineCharts.forEach(request -> {
+            BurndownLineChart burndownLineChart = new BurndownLineChart(
+                    new PlanId(request.planId),
+                    request.version,
+                    LocalDateTime.parse(request.updatedDateTime, DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm:ss")),
+                    new ScopePoint(request.scopePoint),
+                    request.period.stream()
+                            .map(date -> LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy/MM/d")))
+                            .collect(Collectors.toList()),
+                    request.changedPlan,
+                    request.comment
+            );
+            this.chartRepository.add(burndownLineChart);
+        });
+    }
+
+    @ApiOperation(value = "データクリア")
+    @PostMapping("/clear")
+    @ResponseStatus(HttpStatus.OK)
+    public void flash() {
+        this.storyRepository.flash();
+        this.scopeRepository.flash();
+        this.resourceRepository.flash();
+        this.planRepository.flash();
+        this.burnRepository.flash();
+        this.scopePointLogRepository.flash();
+        this.chartRepository.flash();
+        this.iterationPlanningService.dataClear();
     }
 }

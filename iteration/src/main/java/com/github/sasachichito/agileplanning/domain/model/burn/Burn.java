@@ -1,5 +1,6 @@
 package com.github.sasachichito.agileplanning.domain.model.burn;
 
+import com.github.sasachichito.agileplanning.domain.model.plan.Plan;
 import com.github.sasachichito.agileplanning.domain.model.scope.ScopeId;
 import com.github.sasachichito.agileplanning.domain.model.story.task.TaskId;
 import lombok.Getter;
@@ -28,8 +29,8 @@ public class Burn {
         burnSpec.validate(this);
     }
 
-    public BigDecimal burnHours(BurnHoursCalculator burnHoursCalculator) {
-        return burnHoursCalculator.calculate(this);
+    public BigDecimal burnHours(Plan plan, BurnHoursCalculator burnHoursCalculator) {
+        return burnHoursCalculator.calculate(plan, this);
     }
 
     public void remove() {

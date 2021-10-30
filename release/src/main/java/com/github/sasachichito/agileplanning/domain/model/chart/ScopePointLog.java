@@ -29,6 +29,8 @@ public class ScopePointLog {
     public static enum ChangeType {
         INITIAL,
         NEW_STORY,
+        SCOPE_CHANGED,
+        RESOURCE_CHANGED,
         DELETE_STORY,
         // TODO TBD
     }
