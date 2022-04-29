@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 @Getter
 public class JsonBurndownLineChart {
 
-    private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/M/d");
+    public static final DateTimeFormatter periodDtf = DateTimeFormatter.ofPattern("yyyy/M/d");
+    public static final DateTimeFormatter updatedDateTimeDtf = DateTimeFormatter.ofPattern("yyyy/M/d HH:mm:ss");
 
     private int planId;
     private List<String> period;
@@ -27,7 +28,7 @@ public class JsonBurndownLineChart {
         this.planId = burndownLineChart.planId().id();
 
         this.period = burndownLineChart.period().stream()
-                .map(date -> date.format(dtf))
+                .map(date -> date.format(periodDtf))
                 .collect(Collectors.toList());
 
         this.version = burndownLineChart.version();
@@ -43,7 +44,7 @@ public class JsonBurndownLineChart {
                 .collect(Collectors.toList());
 
         this.updatedDateTime = burndownLineChart.updatedDateTime()
-                .format(DateTimeFormatter.ofPattern("yyyy/M/d HH:mm:ss"));
+                .format(updatedDateTimeDtf);
 
         this.comment = burndownLineChart.comment() == null ? "" : burndownLineChart.comment();
     }

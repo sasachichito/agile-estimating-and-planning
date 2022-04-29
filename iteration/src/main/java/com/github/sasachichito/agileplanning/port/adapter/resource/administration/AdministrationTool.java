@@ -19,6 +19,7 @@ import com.github.sasachichito.agileplanning.port.adapter.resource.administratio
 import com.github.sasachichito.agileplanning.port.adapter.resource.administration.request.ImportModel;
 import com.github.sasachichito.agileplanning.port.adapter.resource.burn.BurnResource;
 import com.github.sasachichito.agileplanning.port.adapter.resource.chart.ChartResource;
+import com.github.sasachichito.agileplanning.port.adapter.resource.chart.presentationmodel.JsonBurndownLineChart;
 import com.github.sasachichito.agileplanning.port.adapter.resource.plan.PlanResource;
 import com.github.sasachichito.agileplanning.port.adapter.resource.resource.ResourceResource;
 import com.github.sasachichito.agileplanning.port.adapter.resource.scope.ScopeResource;
@@ -173,10 +174,10 @@ public class AdministrationTool {
             BurndownLineChart burndownLineChart = new BurndownLineChart(
                     new PlanId(request.planId),
                     request.version,
-                    LocalDateTime.parse(request.updatedDateTime, DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm:ss")),
+                    LocalDateTime.parse(request.updatedDateTime, JsonBurndownLineChart.updatedDateTimeDtf),
                     new ScopeIdealHours(request.scopeIdealHours),
                     request.period.stream()
-                        .map(date -> LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy/MM/d")))
+                        .map(date -> LocalDate.parse(date, JsonBurndownLineChart.periodDtf))
                         .collect(Collectors.toList()),
                     request.changedPlan,
                     request.comment
